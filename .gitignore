@@ -1,7 +1,5 @@
 # data downloaded from fma
 fma_data/
-# files provided by the tutor
-guide/
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,linux,python,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,linux,python,jupyternotebooks
