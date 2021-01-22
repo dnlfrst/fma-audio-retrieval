@@ -18,4 +18,4 @@ As a user, I would like to find other songs that are similar to a song that I li
 
 ### Multiple-Samples Query (MSQ)
 
-As a user, I would like to receive a playlist with songs that are similar to the ones in a playlast that I like.
+As a user, I would like to receive a playlist with songs that are similar to the ones in a playlist that I like.
