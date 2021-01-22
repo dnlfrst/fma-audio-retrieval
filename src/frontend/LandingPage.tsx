@@ -1,6 +1,6 @@
 import { GithubFilled } from "@ant-design/icons";
-import { Button, Layout, PageHeader, Typography } from 'antd';
-import React from 'react';
+import { Button, Layout, PageHeader, Typography } from "antd";
+import React from "react";
 import styled from "styled-components";
 
 const { Content, Footer, Header } = Layout;
@@ -22,13 +22,19 @@ const FullSizeLayout = styled(Layout)`
   height: 100%;
 `;
 
-const GitHubLink = () => <Button
-  href={'https://github.com/dnlfrst/fma-audio-retrieval'}
-  icon={<GithubFilled style={{ color: 'white', fontSize: 'x-large', verticalAlign: 'middle' }} />}
-  shape="circle"
-  target="_blank"
-  type="link"
-/>;
+const GitHubLink = () => (
+  <Button
+    href={"https://github.com/dnlfrst/fma-audio-retrieval"}
+    icon={
+      <GithubFilled
+        style={{ color: "white", fontSize: "x-large", verticalAlign: "middle" }}
+      />
+    }
+    shape="circle"
+    target="_blank"
+    type="link"
+  />
+);
 
 const Title = styled.span`
   color: var(--layout-header-color);
@@ -43,14 +49,28 @@ const Title = styled.span`
 const LandingPage = () => {
   return (
     <FullSizeLayout>
-      <AdaptiveHeader><PageHeader
-        extra={<GitHubLink />}
-        title={<Title><ColoredLink href="https://arxiv.org/abs/1612.01840" target="_blank"><u>Free Music
-          Archive</u></ColoredLink><span>📦</span>Audio
-          Retrieval</Title>}
-      /></AdaptiveHeader>
+      <AdaptiveHeader>
+        <PageHeader
+          extra={<GitHubLink />}
+          title={
+            <Title>
+              <ColoredLink
+                href="https://arxiv.org/abs/1612.01840"
+                target="_blank"
+              >
+                <u>Free Music Archive</u>
+              </ColoredLink>
+              <span>📦</span>Audio Retrieval
+            </Title>
+          }
+        />
+      </AdaptiveHeader>
       <Content></Content>
-      <CenteredFooter><Text type="secondary">Made by <b>Daniel Fürst</b> & <b>Jonathan Yang</b></Text></CenteredFooter>
+      <CenteredFooter>
+        <Text type="secondary">
+          Made by <b>Daniel Fürst</b> & <b>Jonathan Yang</b>
+        </Text>
+      </CenteredFooter>
     </FullSizeLayout>
   );
 };
