@@ -1,0 +1,43 @@
+{
+  "name": "fma-audio-retrieval",
+  "version": "1.0.0",
+  "description": "The frontend for querying the Free Music Archive (FMA).",
+  "main": "build/index.js",
+  "scripts": {
+    "development": "parcel public/index.html",
+    "production": "parcel build public/index.html -d build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlfrst/fma-audio-retrieval.git"
+  },
+  "keywords": [
+    "Audio",
+    "Music",
+    "Retrieval",
+    "FMA"
+  ],
+  "author": "Daniel Fürst",
+  "contributors": [
+    {
+      "name": "Jonathan Yang",
+      "url": "https://github.com/Joilence"
+    }
+  ],
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/dnlfrst/fma-audio-retrieval/issues"
+  },
+  "homepage": "https://github.com/dnlfrst/fma-audio-retrieval#readme",
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.32.5",
+    "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "antd": "^4.10.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
