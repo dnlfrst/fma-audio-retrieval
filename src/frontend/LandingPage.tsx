@@ -15,7 +15,7 @@ const CenteredFooter = styled(Footer)`
 `;
 
 const ColoredLink = styled(Link)`
-  color: var(--layout-header-color) !important;
+  color: black !important;
 `;
 
 const FullSizeLayout = styled(Layout)`
@@ -27,7 +27,7 @@ const GitHubLink = () => (
     href={"https://github.com/dnlfrst/fma-audio-retrieval"}
     icon={
       <GithubFilled
-        style={{ color: "white", fontSize: "x-large", verticalAlign: "middle" }}
+        style={{ color: "black", fontSize: "x-large", verticalAlign: "middle" }}
       />
     }
     shape="circle"
@@ -67,7 +67,7 @@ const LandingPage = () => {
       </AdaptiveHeader>
       <Content></Content>
       <CenteredFooter>
-        <Text type="secondary">
+        <Text style={{ fontWeight: "lighter" }} type="secondary">
           Made by <b>Daniel Fürst</b> & <b>Jonathan Yang</b>
         </Text>
       </CenteredFooter>
