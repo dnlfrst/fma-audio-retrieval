@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import Statistics from "./Statistics";
+import SimilaritySearch from "./SimilaritySearch";
 import TrackList from "./TrackList";
 
 const { Content, Footer, Header } = Layout;
@@ -85,6 +86,9 @@ const LandingPage = () => (
         </Row>
       </Col>
       <Col span={12} style={{ height: "100%" }}>
+        <Row align="top" justify="center">
+          <SimilaritySearch />
+        </Row>
         <Row align="bottom" style={{ flexDirection: "column" }}>
           <AudioPlayer />
         </Row>
