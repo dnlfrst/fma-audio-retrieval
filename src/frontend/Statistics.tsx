@@ -1,39 +1,10 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Chart, registerInteraction } from "@antv/g2";
 import { Card, Spin } from "antd";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import tracksAsJSON from "./assets/tracks.json";
+import React, { useCallback, useRef } from "react";
+import useTracks from "./useTracks";
 
-interface Track {
-  ID: number;
-  title: string;
-  genre: string;
-  duration: number;
-  listens: number;
-  interest: number;
-}
-
-const useTracks = () => {
-  const [tracks, setTracks] = useState<Track[]>([]);
-
-  useEffect(() => {
-    const extractedTracks = [];
-
-    for (const [trackID, track] of Object.entries(tracksAsJSON)) {
-      extractedTracks.push({
-        ...track,
-        ID: trackID,
-        date: new Date(track.date),
-      });
-    }
-
-    setTracks(extractedTracks);
-  }, []);
-
-  return tracks;
-};
-
-const Explorer = () => {
+const Statistics = () => {
   const tracks = useTracks();
   const tooltip = useRef<HTMLDivElement>();
 
@@ -56,7 +27,7 @@ const Explorer = () => {
       const chart = new Chart({
         autoFit: true,
         container: element,
-        height: 384,
+        height: 300,
         limitInPlot: true,
         padding: [25, 50, 120, 75],
         width: 768,
@@ -116,4 +87,4 @@ const Explorer = () => {
   }
 };
 
-export default Explorer;
+export default Statistics;

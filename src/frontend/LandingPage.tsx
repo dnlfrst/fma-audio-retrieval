@@ -2,7 +2,7 @@ import { GithubFilled } from "@ant-design/icons";
 import { Button, Col, Layout, PageHeader, Row, Typography } from "antd";
 import React from "react";
 import styled from "styled-components";
-import Explorer from "./Explorer";
+import Statistics from "./Statistics";
 
 const { Content, Footer, Header } = Layout;
 const { Link, Text } = Typography;
@@ -76,7 +76,7 @@ const LandingPage = () => (
     <CenteredContent>
       <Col span={12}>
         <Row align="top" justify="center">
-          <Explorer />
+          <Statistics />
         </Row>
         <Row align="bottom" />
       </Col>
