@@ -39,7 +39,9 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.4.0",
+    "@antv/g2": "^4.1.7",
     "antd": "^4.10.3",
+    "assets": "^3.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }
