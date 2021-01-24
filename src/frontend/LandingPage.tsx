@@ -2,6 +2,7 @@ import { GithubFilled } from "@ant-design/icons";
 import { Button, Col, Layout, PageHeader, Row, Typography } from "antd";
 import React from "react";
 import styled from "styled-components";
+import AudioPlayer from "./AudioPlayer";
 import Statistics from "./Statistics";
 import TrackList from "./TrackList";
 
@@ -83,7 +84,11 @@ const LandingPage = () => (
           <TrackList />
         </Row>
       </Col>
-      <Col span={12} />
+      <Col span={12} style={{ height: "100%" }}>
+        <Row align="bottom" style={{ flexDirection: "column" }}>
+          <AudioPlayer />
+        </Row>
+      </Col>
     </CenteredContent>
     <CenteredFooter>
       <Text style={{ fontWeight: "lighter" }} type="secondary">
