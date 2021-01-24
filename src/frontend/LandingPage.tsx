@@ -3,6 +3,7 @@ import { Button, Col, Layout, PageHeader, Row, Typography } from "antd";
 import React from "react";
 import styled from "styled-components";
 import Statistics from "./Statistics";
+import TrackList from "./TrackList";
 
 const { Content, Footer, Header } = Layout;
 const { Link, Text } = Typography;
@@ -78,7 +79,9 @@ const LandingPage = () => (
         <Row align="top" justify="center">
           <Statistics />
         </Row>
-        <Row align="bottom" />
+        <Row align="bottom" style={{ flexDirection: "column" }}>
+          <TrackList />
+        </Row>
       </Col>
       <Col span={12} />
     </CenteredContent>
