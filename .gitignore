@@ -1,8 +1,8 @@
 # data downloaded from fma
 .vscode
 fma_data/
-backend/data/fma_metadata
-backend/data/fma_small
+src/backend/data/fma_metadata
+src/backend/data/fma_small
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,python,windows,jetbrains+all,jupyternotebooks,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,python,windows,jetbrains+all,jupyternotebooks,node
