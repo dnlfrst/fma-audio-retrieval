@@ -6,7 +6,6 @@ import useTracks from "./useTracks";
 
 const Statistics = () => {
   const tracks = useTracks();
-  const tooltip = useRef<HTMLDivElement>();
 
   const container = useCallback(
     (element) => {
@@ -27,16 +26,15 @@ const Statistics = () => {
       const chart = new Chart({
         autoFit: true,
         container: element,
-        height: 300,
-        limitInPlot: true,
-        padding: [25, 50, 120, 75],
+        height: 275,
+        padding: [25, 50, 110, 75],
         width: 768,
       });
 
       chart.data(tracks);
       chart.scale({
         date: { nice: true, type: "time" },
-        interest: { nice: true, type: "pow" },
+        popularity: { nice: true, type: "pow" },
       });
       chart.axis("date", {
         title: {
@@ -47,7 +45,7 @@ const Statistics = () => {
           text: "Date of Release",
         },
       });
-      chart.axis("interest", {
+      chart.axis("popularity", {
         title: {
           style: {
             fontStyle: "italic",
@@ -57,7 +55,7 @@ const Statistics = () => {
         },
       });
 
-      chart.point().position("date*interest").color("genre");
+      chart.point().position("date*popularity").color("genre");
       chart.interaction("drag-move");
       chart.interaction("view-zoom");
 
@@ -72,15 +70,12 @@ const Statistics = () => {
 
   if (tracks.length > 0) {
     return (
-      <>
-        <Card
-          style={{ width: "100%" }}
-          title="Popularity of Genres through Time"
-        >
-          <div ref={container} />
-        </Card>
-        <div ref={tooltip} />
-      </>
+      <Card
+        title="Popularity of Genres through Time"
+        style={{ gridArea: "statistics" }}
+      >
+        <div ref={container} />
+      </Card>
     );
   } else {
     return <Spin indicator={<LoadingOutlined />} />;

@@ -15,9 +15,6 @@ const AdaptiveHeader = styled(Header)`
 `;
 
 const CenteredContent = styled(Content)`
-  align-items: center;
-  display: flex;
-  justify-content: center;
   padding-left: 75px;
   padding-right: 75px;
 `;
@@ -48,6 +45,13 @@ const GitHubLink = () => (
   />
 );
 
+const Grid = styled.div`
+  display: grid;
+  grid-gap: 8px;
+  grid-template-areas: "statistics similaritySearch" "trackList similaritySearch" "trackList audioPlayer";
+  grid-template-columns: 1fr 1fr;
+`;
+
 const Title = styled.span`
   color: var(--layout-header-color);
   font-weight: bold;
@@ -77,22 +81,12 @@ const LandingPage = () => (
       />
     </AdaptiveHeader>
     <CenteredContent>
-      <Col span={12}>
-        <Row align="top" justify="center">
-          <Statistics />
-        </Row>
-        <Row align="bottom" style={{ flexDirection: "column" }}>
-          <TrackList />
-        </Row>
-      </Col>
-      <Col span={12} style={{ height: "100%" }}>
-        <Row align="top" justify="center">
-          <SimilaritySearch />
-        </Row>
-        <Row align="bottom" style={{ flexDirection: "column" }}>
-          <AudioPlayer />
-        </Row>
-      </Col>
+      <Grid>
+        <Statistics />
+        <SimilaritySearch />
+        <TrackList />
+        <AudioPlayer />
+      </Grid>
     </CenteredContent>
     <CenteredFooter>
       <Text style={{ fontWeight: "lighter" }} type="secondary">

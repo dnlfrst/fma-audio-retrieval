@@ -1,5 +1,6 @@
 import { Card, Table } from "antd";
 import React from "react";
+import Statistics from "./Statistics";
 import useTracks from "./useTracks";
 
 const trackListColumns = [
@@ -21,7 +22,7 @@ const trackListColumns = [
     title: "Release Date",
   },
   {
-    dataIndex: "interest",
+    dataIndex: "popularity",
     title: "Popularity",
   },
 ];
@@ -30,7 +31,7 @@ const TrackList = () => {
   const tracks = useTracks();
 
   return (
-    <Card style={{ width: "100%" }} title="Tracks">
+    <Card style={{ gridArea: "trackList" }} title="Tracks">
       <Table
         columns={trackListColumns}
         dataSource={tracks}

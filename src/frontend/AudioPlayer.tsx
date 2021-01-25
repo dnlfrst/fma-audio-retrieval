@@ -9,7 +9,7 @@ const StyledHTMLAudioPlayer = styled(HTMLAudioPlayer)`
 `;
 
 const AudioPlayer = () => (
-  <Card style={{ width: "100%" }}>
+  <Card style={{ gridArea: "audioPlayer" }}>
     <StyledHTMLAudioPlayer
       layout="stacked-reverse"
       src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
