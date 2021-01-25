@@ -5,9 +5,8 @@ export interface Track {
   ID: number;
   title: string;
   genre: string;
-  duration: number;
-  listens: number;
-  interest: number;
+  popularity: number;
+  date: number;
 }
 
 const useTracks = () => {

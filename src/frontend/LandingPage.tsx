@@ -1,10 +1,10 @@
 import { GithubFilled } from "@ant-design/icons";
-import { Button, Col, Layout, PageHeader, Row, Typography } from "antd";
-import React from "react";
+import { Button, Layout, PageHeader, Typography } from "antd";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
-import Statistics from "./Statistics";
 import SimilaritySearch from "./SimilaritySearch";
+import Statistics from "./Statistics";
 import TrackList from "./TrackList";
 
 const { Content, Footer, Header } = Layout;
@@ -62,38 +62,52 @@ const Title = styled.span`
   }
 `;
 
-const LandingPage = () => (
-  <FullSizeLayout>
-    <AdaptiveHeader>
-      <PageHeader
-        extra={<GitHubLink />}
-        title={
-          <Title>
-            <ColoredLink
-              href="https://arxiv.org/abs/1612.01840"
-              target="_blank"
-            >
-              <u>Free Music Archive</u>
-            </ColoredLink>
-            <span>📦</span>Audio Retrieval
-          </Title>
-        }
-      />
-    </AdaptiveHeader>
-    <CenteredContent>
-      <Grid>
-        <Statistics />
-        <SimilaritySearch />
-        <TrackList />
-        <AudioPlayer />
-      </Grid>
-    </CenteredContent>
-    <CenteredFooter>
-      <Text style={{ fontWeight: "lighter" }} type="secondary">
-        Made by <b>Daniel Fürst</b> & <b>Jonathan Yang</b>
-      </Text>
-    </CenteredFooter>
-  </FullSizeLayout>
-);
+const LandingPage = () => {
+  const [isPlaying, setIsPLaying] = useState<boolean>(false);
+  const [playingTrackID, setPlayingTrackID] = useState<number | undefined>();
+
+  return (
+    <FullSizeLayout>
+      <AdaptiveHeader>
+        <PageHeader
+          extra={<GitHubLink />}
+          title={
+            <Title>
+              <ColoredLink
+                href="https://arxiv.org/abs/1612.01840"
+                target="_blank"
+              >
+                <u>Free Music Archive</u>
+              </ColoredLink>
+              <span>📦</span>Audio Retrieval
+            </Title>
+          }
+        />
+      </AdaptiveHeader>
+      <CenteredContent>
+        <Grid>
+          <Statistics />
+          <SimilaritySearch />
+          <TrackList
+            isPlaying={isPlaying}
+            playingTrackID={playingTrackID}
+            setIsPlaying={setIsPLaying}
+            setPlayingTrackID={setPlayingTrackID}
+          />
+          <AudioPlayer
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPLaying}
+            trackID={playingTrackID}
+          />
+        </Grid>
+      </CenteredContent>
+      <CenteredFooter>
+        <Text style={{ fontWeight: "lighter" }} type="secondary">
+          Made by <b>Daniel Fürst</b> & <b>Jonathan Yang</b>
+        </Text>
+      </CenteredFooter>
+    </FullSizeLayout>
+  );
+};
 
 export default LandingPage;
