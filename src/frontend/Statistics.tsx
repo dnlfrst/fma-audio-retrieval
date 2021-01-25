@@ -46,6 +46,9 @@ const Statistics = () => {
         },
       });
       chart.axis("popularity", {
+        label: {
+          formatter: (text) => Number(text).toFixed(2),
+        },
         title: {
           style: {
             fontStyle: "italic",
