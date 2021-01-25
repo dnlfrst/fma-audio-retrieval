@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Chart, registerInteraction } from "@antv/g2";
 import { Card, Spin } from "antd";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import useTracks from "./useTracks";
 
 const Statistics = () => {
