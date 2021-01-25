@@ -11,8 +11,8 @@ app = Flask(__name__)
 CORS(app)
 
 data_path = 'data'
-fma_small_path = '../fma_data/fma_small'
-fma_meta_path = '../fma_data/fma_metadata'
+fma_small_path = f'{data_path}/fma_small'
+fma_meta_path = f'{data_path}/fma_metadata'
 
 #######################################################
 ###################### Load Data ######################
