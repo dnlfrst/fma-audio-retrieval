@@ -54,6 +54,7 @@ def get_all_audio_id():
                               tracks['track', 'title'],
                               tracks['track', 'date_created']]).transpose()
     selection.columns = ['artist', 'album', 'genre_top', 'title', 'date_created']
+    selection['id'] = selection.index
     # ids = [str(e).split('/')[-1].replace('.mp3', '') for e in list(Path(fma_small_path).rglob("*.mp3"))]
     return jsonify(selection.to_dict(orient='records')), 200
 
