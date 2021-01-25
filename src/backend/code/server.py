@@ -46,6 +46,7 @@ with open('data/model.pkl', 'rb') as f:
 
 @app.route('/all-audio-id', methods=['GET'])
 def get_all_audio_id():
+    tracks = fma_load('~/Downloads/fma_metadata/tracks.csv')
     ids = [str(e).split('/')[-1].replace('.mp3', '') for e in list(Path(fma_small_path).rglob("*.mp3"))]
     return jsonify({'IDs': ids}), 200
 
