@@ -1,7 +1,9 @@
-from pathlib import Path
-import pandas as pd
-import os
 import ast
+import os
+from pathlib import Path
+
+import pandas as pd
+
 
 def get_all_audio_paths(path):
     return [str(e) for e in list(Path(path).rglob("*.mp3"))]
@@ -10,7 +12,7 @@ def get_all_audio_paths(path):
 def fma_load(filepath):
     """
     Load files provided by fma with their specification, taken from mdeff/fma.
-    """    
+    """
 
     filename = os.path.basename(filepath)
 
@@ -41,11 +43,11 @@ def fma_load(filepath):
         SUBSETS = ('small', 'medium', 'large')
         try:
             tracks['set', 'subset'] = tracks['set', 'subset'].astype(
-                    pd.CategoricalDtype(categories=SUBSETS, ordered=True))
+                pd.CategoricalDtype(categories=SUBSETS, ordered=True))
         except TypeError:
             # the categories and ordered arguments were removed in pandas 0.25
             tracks['set', 'subset'] = tracks['set', 'subset'].astype(
-                    pd.CategoricalDtype(categories=SUBSETS, ordered=True))
+                pd.CategoricalDtype(categories=SUBSETS, ordered=True))
 
         COLUMNS = [('track', 'genre_top'), ('track', 'license'),
                    ('album', 'type'), ('album', 'information'),

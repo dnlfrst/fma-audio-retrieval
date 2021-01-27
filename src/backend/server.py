@@ -1,11 +1,11 @@
-from utils import *
-from flask import Flask, json, jsonify, request
-from flask.helpers import send_file
-from flask_cors import CORS
-from pathlib import Path
-import pandas as pd
 import pickle
 import time
+
+from flask import Flask, jsonify
+from flask.helpers import send_file
+from flask_cors import CORS
+
+from utils import *
 
 app = Flask(__name__)
 CORS(app)
@@ -44,13 +44,14 @@ selected_tracks = tracks.loc[test].head(400)
 with open('data/model.pkl', 'rb') as f:
     model = pickle.load(f)
 
+
 #######################################################
 ####################### Routing #######################
 #######################################################
 
 @app.route('/all-audio-id', methods=['GET'])
 def get_all_audio_id():
-    selection = pd.DataFrame([selected_tracks['artist', 'name'], 
+    selection = pd.DataFrame([selected_tracks['artist', 'name'],
                               selected_tracks['album', 'title'],
                               selected_tracks['track', 'genre_top'],
                               selected_tracks['track', 'title'],
@@ -60,17 +61,19 @@ def get_all_audio_id():
     # ids = [str(e).split('/')[-1].replace('.mp3', '') for e in list(Path(fma_small_path).rglob("*.mp3"))]
     return jsonify(selection.to_dict(orient='records')), 200
 
+
 @app.route('/audio/<audio_id>', methods=['GET'])
 def get_audio(audio_id):
     path = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
     return send_file(path), 200
+
 
 @app.route('/audio-query/<audio_id>', methods=['GET'])
 def query_audio(audio_id):
     audio_id = int(audio_id)
     audio_feature = selected_features_small.loc[selected_features_small.index == audio_id]
     distances, indices = model.kneighbors(audio_feature)
-    return jsonify({ 'distances': distances.tolist(), 'indices': indices.tolist() }), 200
+    return jsonify({'distances': distances.tolist(), 'indices': indices.tolist()}), 200
 
 @app.route('/audio-duration-predictions/<audio_id>', methods=['GET'])
 def get_audio_duration_predictions(audio_id):
