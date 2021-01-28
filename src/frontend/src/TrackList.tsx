@@ -1,14 +1,16 @@
 import { PauseCircleOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { Button, Card, Table } from "antd";
+import { ColumnsType } from "antd/lib/table";
 import React from "react";
-import useTracks, { Track } from "./useTracks";
+import { Track } from "./Track";
+import useTracks from "./useTracks";
 
 const getTrackListColumns = (
   isPlaying: boolean,
   playingTrackID: number,
   setIsPlaying: (isPlaying: boolean) => void,
   setPlayingTrackID: (trackID: number) => void
-) => [
+): ColumnsType<Track> => [
   {
     dataIndex: "ID",
     sorter: (firstTrack: Track, secondTrack: Track) =>

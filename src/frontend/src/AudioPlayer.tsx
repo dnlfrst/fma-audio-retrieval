@@ -56,10 +56,7 @@ const AudioPlayer = ({
         ref={audioPlayer}
         src={
           trackID !== undefined
-            ? `http://localhost:8000/${paddedTrackID.substring(
-                0,
-                3
-              )}/${paddedTrackID}.mp3`
+            ? `http://localhost:5000/tracks/${paddedTrackID}/audio`
             : undefined
         }
       />
