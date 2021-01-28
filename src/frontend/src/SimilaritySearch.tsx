@@ -1,8 +1,10 @@
-import { Card } from "antd";
 import React from "react";
+import styled from "styled-components";
 
-const SimilaritySearch = () => (
-  <Card style={{ gridArea: "similaritySearch" }} />
-);
+const Container = styled.div`
+  height: 100%;
+`;
+
+const SimilaritySearch = () => <Container />;
 
 export default SimilaritySearch;

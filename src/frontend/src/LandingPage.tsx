@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
-import Statistics from "./Statistics";
 import TrackList from "./TrackList";
 
 const { Content, Footer, Header } = Layout;
@@ -15,11 +14,17 @@ const AdaptiveHeader = styled(Header)`
 `;
 
 const CenteredContent = styled(Content)`
+  align-items: center;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
   padding-left: 75px;
   padding-right: 75px;
+  position: relative;
 `;
 
 const CenteredFooter = styled(Footer)`
+  background-color: white;
   text-align: center;
 `;
 
@@ -45,13 +50,6 @@ const GitHubLink = () => (
   />
 );
 
-const Grid = styled.div`
-  display: grid;
-  grid-gap: 8px;
-  grid-template-areas: "statistics similaritySearch" "trackList similaritySearch" "trackList audioPlayer";
-  grid-template-columns: 1fr 1fr;
-`;
-
 const Title = styled.span`
   color: var(--layout-header-color);
   font-weight: bold;
@@ -63,7 +61,6 @@ const Title = styled.span`
 `;
 
 const LandingPage = () => {
-  const [isPlaying, setIsPLaying] = useState<boolean>(false);
   const [playingTrackID, setPlayingTrackID] = useState<number | undefined>();
 
   return (
@@ -85,21 +82,8 @@ const LandingPage = () => {
         />
       </AdaptiveHeader>
       <CenteredContent>
-        <Grid>
-          <Statistics />
-          <SimilaritySearch />
-          <TrackList
-            isPlaying={isPlaying}
-            playingTrackID={playingTrackID}
-            setIsPlaying={setIsPLaying}
-            setPlayingTrackID={setPlayingTrackID}
-          />
-          <AudioPlayer
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPLaying}
-            trackID={playingTrackID}
-          />
-        </Grid>
+        <SimilaritySearch />
+        <AudioPlayer trackID={playingTrackID} />
       </CenteredContent>
       <CenteredFooter>
         <Text style={{ fontWeight: "lighter" }} type="secondary">
