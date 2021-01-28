@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const StyledHTMLAudioPlayer = styled(HTMLAudioPlayer)`
   box-shadow: unset;
+  margin: 0 auto;
   width: 512px;
 `;
 
