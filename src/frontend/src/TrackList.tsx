@@ -1,7 +1,8 @@
 import { PauseCircleOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { Button, Card, Table } from "antd";
 import React from "react";
-import useTracks, { Track } from "./useTracks";
+import { Track } from "./Track";
+import useTracks from "./useTracks";
 
 const getTrackListColumns = (
   isPlaying: boolean,
