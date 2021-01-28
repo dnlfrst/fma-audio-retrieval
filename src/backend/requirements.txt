@@ -4,5 +4,6 @@
 
 flask
 flask_cors
+Flask-Caching
 pandas
 scikit-learn
