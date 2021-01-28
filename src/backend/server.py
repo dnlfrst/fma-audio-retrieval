@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import pickle
 import time
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -74,6 +75,9 @@ def query_audio(audio_id):
 
 @app.route('/audio-duration-predictions/<audio_id>', methods=['GET'])
 def get_audio_duration_predictions(audio_id):
-    # TODO: check if audio_id is in test
-    df = pd.read_csv(f'{data_path}/duration_predictions/{audio_id}_dp.csv')
-    return jsonify(df.to_dict(orient='records'))
+    filepath = f'{data_path}/duration_predictions/{audio_id}_dp.csv'
+    if os.path.isfile(filepath):
+        df = pd.read_csv(filepath)
+        return jsonify(df.to_dict(orient='records')), 200
+    else:
+        return 404
