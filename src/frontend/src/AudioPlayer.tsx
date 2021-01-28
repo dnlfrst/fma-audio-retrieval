@@ -8,7 +8,7 @@ const StyledHTMLAudioPlayer = styled(HTMLAudioPlayer)`
   width: 512px;
 `;
 
-const AudioPlayer = ({ trackID }: { trackID: number }) => {
+const AudioPlayer = ({ trackID }: { trackID: string }) => {
   return (
     <StyledHTMLAudioPlayer
       layout="stacked-reverse"

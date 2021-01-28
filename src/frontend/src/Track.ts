@@ -3,7 +3,7 @@ export interface Track {
   artist: string;
   date: Date;
   genre: string;
-  ID: number;
+  ID: string;
   popularity: number;
   title: string;
 }
