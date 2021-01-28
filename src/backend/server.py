@@ -4,6 +4,7 @@ import time
 from flask import Flask, jsonify
 from flask.helpers import send_file
 from flask_cors import CORS
+from numpy import datetime64
 
 from utils import *
 
@@ -59,6 +60,7 @@ def get_all_audio_id():
     selection.columns = ['artist', 'album', 'genre_top', 'title', 'date_created']
     selection['id'] = selection.index
     # ids = [str(e).split('/')[-1].replace('.mp3', '') for e in list(Path(fma_small_path).rglob("*.mp3"))]
+    selection = selection.astype({'date_created': datetime64})
     return jsonify(selection.to_dict(orient='records')), 200
 
 
