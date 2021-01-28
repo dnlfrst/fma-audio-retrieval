@@ -1,9 +1,10 @@
-import { GithubFilled } from "@ant-design/icons";
-import { Button, Layout, PageHeader, Typography } from "antd";
-import React, { useState } from "react";
+import { GithubFilled, LoadingOutlined } from "@ant-design/icons";
+import { Button, Layout, PageHeader, Spin, Typography } from "antd";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
+import useTracks from "./useTracks";
 
 const { Content, Footer, Header } = Layout;
 const { Link, Text } = Typography;
@@ -13,18 +14,23 @@ const AdaptiveHeader = styled(Header)`
 `;
 
 const CenteredContent = styled(Content)`
-  align-items: center;
   background-color: white;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto fit-content(25%);
+  padding-bottom: 25px;
   padding-left: 75px;
   padding-right: 75px;
-  position: relative;
 `;
 
 const CenteredFooter = styled(Footer)`
   background-color: white;
   text-align: center;
+`;
+
+const CenteredSpin = styled(Spin)`
+  align-items: center;
+  display: flex;
+  justify-content: center;
 `;
 
 const ColoredLink = styled(Link)`
@@ -60,7 +66,18 @@ const Title = styled.span`
 `;
 
 const LandingPage = () => {
-  const [playingTrackID, setPlayingTrackID] = useState<number | undefined>();
+  const [playingTrackID, setPlayingTrackID] = useState<string | undefined>();
+  const [selectedTrackID, setSelectedTrackID] = useState<string | undefined>();
+  const tracks = useTracks();
+
+  useEffect(() => {
+    if (tracks?.length === 0) return;
+
+    const randomTrackID =
+      tracks?.[Math.floor(Math.random() * tracks.length)].ID;
+
+    setSelectedTrackID(randomTrackID);
+  }, [tracks]);
 
   return (
     <FullSizeLayout>
@@ -81,7 +98,11 @@ const LandingPage = () => {
         />
       </AdaptiveHeader>
       <CenteredContent>
-        <SimilaritySearch />
+        {selectedTrackID ? (
+          <SimilaritySearch trackID={selectedTrackID} />
+        ) : (
+          <CenteredSpin indicator={<LoadingOutlined />} />
+        )}
         <AudioPlayer trackID={playingTrackID} />
       </CenteredContent>
       <CenteredFooter>
