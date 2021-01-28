@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
-import TrackList from "./TrackList";
 
 const { Content, Footer, Header } = Layout;
 const { Link, Text } = Typography;
