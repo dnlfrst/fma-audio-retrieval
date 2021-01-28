@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import tracksAsJSON from "./assets/tracks.json";
+import tracksAsJSON from "../assets/tracks.json";
 
 export interface Track {
   ID: number;
