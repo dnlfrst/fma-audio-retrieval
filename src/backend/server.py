@@ -71,3 +71,9 @@ def query_audio(audio_id):
     audio_feature = selected_features_small.loc[selected_features_small.index == audio_id]
     distances, indices = model.kneighbors(audio_feature)
     return jsonify({ 'distances': distances.tolist(), 'indices': indices.tolist() }), 200
+
+@app.route('/audio-duration-predictions/<audio_id>', methods=['GET'])
+def get_audio_duration_predictions(audio_id):
+    # TODO: check if audio_id is in test
+    df = pd.read_csv(f'{data_path}/duration_predictions/{audio_id}_dp.csv')
+    return jsonify(df.to_dict(orient='records'))
