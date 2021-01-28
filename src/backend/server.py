@@ -56,8 +56,9 @@ def get_all_audio_id():
                               selected_tracks['album', 'title'],
                               selected_tracks['track', 'genre_top'],
                               selected_tracks['track', 'title'],
-                              selected_tracks['track', 'date_created']]).transpose()
-    selection.columns = ['artist', 'album', 'genre_top', 'title', 'date_created']
+                              selected_tracks['track', 'date_created'],
+                              selected_tracks['track', 'interest']]).transpose()
+    selection.columns = ['artist', 'album', 'genre_top', 'title', 'date_created', 'interest']
     selection['id'] = selection.index
     selection = selection.astype({'date_created': datetime64})
     return jsonify(selection.to_dict(orient='records')), 200
