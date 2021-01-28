@@ -38,6 +38,8 @@ print(f'--- {time.time() - start_time} seconds for data read ---')
 
 small = tracks['set', 'subset'] <= 'small'
 selected_features_small = features.loc[small, 'mfcc']
+test = tracks['set', 'split'] == 'test'
+selected_tracks = tracks.loc[test].head(400)
 
 with open('data/model.pkl', 'rb') as f:
     model = pickle.load(f)
@@ -48,11 +50,11 @@ with open('data/model.pkl', 'rb') as f:
 
 @app.route('/all-audio-id', methods=['GET'])
 def get_all_audio_id():
-    selection = pd.DataFrame([tracks['artist', 'name'], 
-                              tracks['album', 'title'],
-                              tracks['track', 'genre_top'],
-                              tracks['track', 'title'],
-                              tracks['track', 'date_created']]).transpose()
+    selection = pd.DataFrame([selected_tracks['artist', 'name'], 
+                              selected_tracks['album', 'title'],
+                              selected_tracks['track', 'genre_top'],
+                              selected_tracks['track', 'title'],
+                              selected_tracks['track', 'date_created']]).transpose()
     selection.columns = ['artist', 'album', 'genre_top', 'title', 'date_created']
     selection['id'] = selection.index
     # ids = [str(e).split('/')[-1].replace('.mp3', '') for e in list(Path(fma_small_path).rglob("*.mp3"))]
