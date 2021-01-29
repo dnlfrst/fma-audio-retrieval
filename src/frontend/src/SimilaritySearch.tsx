@@ -1,8 +1,27 @@
 import Graphin from "@antv/graphin";
-import React from "react";
+import React, { useCallback } from "react";
 import useTrackSimilarities from "./useTrackSimilarities";
 
-const SimilaritySearch = ({ trackID }: { trackID: string }) => {
+const SimilaritySearch = ({
+  setSelectedTrackID,
+  trackID,
+}: {
+  setSelectedTrackID: (trackID: string) => void;
+  trackID: string;
+}) => {
+  const graphin = useCallback(
+    (graphin: Graphin) => {
+      if (!graphin) return;
+
+      const { graph } = graphin;
+
+      graph.on("node:click", (event) => {
+        console.log(event.item.getID());
+        setSelectedTrackID(event.item.getID());
+      });
+    },
+    [trackID]
+  );
   const trackSimilarities = useTrackSimilarities(trackID);
 
   if (!trackID || !trackSimilarities) return null;
@@ -14,14 +33,14 @@ const SimilaritySearch = ({ trackID }: { trackID: string }) => {
       },
       ...trackSimilarities.indices.map((index) => {
         return {
-          id: index.toString(),
+          id: index.toString().padStart(6, "0"),
         };
       }),
     ],
     edges: trackSimilarities.indices.map((index) => {
       return {
         source: trackID.toString(),
-        target: index.toString(),
+        target: index.toString().padStart(6, "0"),
       };
     }),
   };
@@ -30,6 +49,7 @@ const SimilaritySearch = ({ trackID }: { trackID: string }) => {
     <Graphin
       data={data}
       layout={{ minNodeSpacing: 100, sortBy: "degree", type: "concentric" }}
+      ref={graphin}
     />
   );
 };

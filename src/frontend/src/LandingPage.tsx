@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
+import TrackViewer from "./TrackViewer";
 import useTracks from "./useTracks";
 
 const { Content, Footer, Header } = Layout;
@@ -71,13 +72,18 @@ const LandingPage = () => {
   const [selectedTrackID, setSelectedTrackID] = useState<string | undefined>();
   const tracks = useTracks();
 
-  useEffect(() => {
-    if (tracks?.length === 0) return;
-
+  const selectRandomTrack = () => {
     const randomTrackID =
       tracks?.[Math.floor(Math.random() * tracks.length)].ID;
 
+    setPlayingTrackID(randomTrackID);
     setSelectedTrackID(randomTrackID);
+  };
+
+  useEffect(() => {
+    if (tracks?.length === 0) return;
+
+    selectRandomTrack();
   }, [tracks]);
 
   return (
@@ -100,10 +106,17 @@ const LandingPage = () => {
       </AdaptiveHeader>
       <CenteredContent>
         {selectedTrackID ? (
-          <SimilaritySearch trackID={selectedTrackID} />
+          <SimilaritySearch
+            setSelectedTrackID={setSelectedTrackID}
+            trackID={selectedTrackID}
+          />
         ) : (
           <CenteredSpin indicator={<LoadingOutlined />} />
         )}
+        <TrackViewer
+          selectRandomTrack={selectRandomTrack}
+          trackID={selectedTrackID}
+        />
         <AudioPlayer trackID={playingTrackID} />
       </CenteredContent>
       <CenteredFooter>
