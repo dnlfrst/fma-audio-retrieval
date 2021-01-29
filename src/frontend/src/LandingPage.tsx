@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
+import TrackGenreViewer from "./TrackGenreViewer";
 import TrackViewer from "./TrackViewer";
 import useTracks from "./useTracks";
 
@@ -118,6 +119,7 @@ const LandingPage = () => {
           trackID={selectedTrackID}
         />
         <AudioPlayer trackID={playingTrackID} />
+        <TrackGenreViewer trackID={playingTrackID} />
       </CenteredContent>
       <CenteredFooter>
         <Text style={{ fontWeight: "lighter" }} type="secondary">

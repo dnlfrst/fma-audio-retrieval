@@ -46,6 +46,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.0.17",
     "@ant-design/icons": "^4.4.0",
     "@antv/g2": "^4.1.7",
     "@antv/graphin": "^2.0.0-beta.7",
