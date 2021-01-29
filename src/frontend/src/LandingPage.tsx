@@ -15,11 +15,12 @@ const AdaptiveHeader = styled(Header)`
 
 const CenteredContent = styled(Content)`
   background-color: white;
-  display: grid;
-  grid-template-rows: auto fit-content(25%);
+  display: flex;
+  justify-content: center;
   padding-bottom: 25px;
   padding-left: 75px;
   padding-right: 75px;
+  position: relative;
 `;
 
 const CenteredFooter = styled(Footer)`
