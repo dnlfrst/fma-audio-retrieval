@@ -74,7 +74,7 @@ scaler.fit_transform(timbre_features)
 #######################################################
 
 @app.route('/tracks')
-@cache.cached(timeout=0, key_prefix='tracks')
+@cache.cached(timeout=0)
 def get_all_audio_id():
     selection = pd.DataFrame([tracks['artist', 'name'],
                               tracks['album', 'title'],
@@ -89,7 +89,7 @@ def get_all_audio_id():
 
 
 @app.route('/tracks/<audio_id>/audio')
-@cache.cached(timeout=0, key_prefix='tracks-audio')
+@cache.cached(timeout=0)
 def get_audio(audio_id):
     filepath = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
     if os.path.isfile(filepath):
@@ -99,10 +99,10 @@ def get_audio(audio_id):
 
 
 @app.route('/tracks/<audio_id>/similarities')
-@cache.cached(timeout=0, key_prefix='tracks-similarities')
+@cache.cached(timeout=0)
 def query_audio(audio_id):
     audio_id = int(audio_id)
-    
+
     all_dist, all_tids = similarities(audio_id, all_features_nn,
                                       all_features.loc[all_features.index == audio_id])
     beats_dist, beats_tids = similarities(audio_id, beats_nn,
@@ -129,7 +129,7 @@ def similarities(audio_id, model, features):
     else:
         tids = tids[:10]
         distances = distances[:10]
-    
+
     return distances, tids
 
 @app.route('/tracks/<audio_id>/genre')
