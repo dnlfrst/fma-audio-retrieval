@@ -2,7 +2,7 @@ import pickle
 import time
 import os
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from flask.helpers import send_file
 from flask_caching import Cache
 from flask_cors import CORS
@@ -147,4 +147,4 @@ def get_audio_duration_predictions(audio_id):
         df = pd.read_csv(filepath)
         return jsonify(df.to_dict(orient='records')), 200
     else:
-        return 404
+        return abort(404)
