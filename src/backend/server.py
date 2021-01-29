@@ -7,6 +7,7 @@ from flask.helpers import send_file
 from flask_caching import Cache
 from flask_cors import CORS
 from numpy import datetime64
+import pandas as pd
 
 from utils import *
 
@@ -36,24 +37,17 @@ tracks = fma_load(f'{data_path}/tracks_small.csv')
 # genres = fma_load(f'{data_path}/genres.csv')
 # echonest = fma_load(f'{data_path}/echonest.csv')
 
-# with open('data/features.pkl', 'rb') as f:
-#     features = pickle.load(f)
-# with open('data/tracks.pkl', 'rb') as f:
-#     tracks = pickle.load(f)
-# with open('data/genres.pkl', 'rb') as f:
-#     genres = pickle.load(f)
-# with open('data/echonest.pkl', 'rb') as f:
-#     echonest = pickle.load(f)
-
 print(f'--- {time.time() - start_time} seconds for data read ---')
 
-small = tracks['set', 'subset'] <= 'small'
-selected_features_small = features.loc[small, 'mfcc']
+selected_features_small = features
 test = tracks['set', 'split'] == 'test'
 selected_tracks = tracks.loc[test].head(400)
 
-with open('data/model.pkl', 'rb') as f:
-    model = pickle.load(f)
+with open(f'{data_path}/all_features_nn.pkl', 'rb') as f:
+    all_features_nn = pickle.load(f)
+
+with open(f'{data_path}/i_to_id.pkl', 'rb') as f:
+    i_to_id = pickle.load(f)
 
 
 #######################################################
@@ -78,8 +72,11 @@ def get_all_audio_id():
 @app.route('/tracks/<audio_id>/audio')
 @cache.cached(timeout=0, key_prefix='tracks-audio')
 def get_audio(audio_id):
-    path = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
-    return send_file(path), 200
+    filepath = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
+    if os.path.isfile(filepath):
+        return send_file(filepath), 200
+    else:
+        return 404
 
 
 @app.route('/tracks/<audio_id>/similarities')
@@ -87,8 +84,12 @@ def get_audio(audio_id):
 def query_audio(audio_id):
     audio_id = int(audio_id)
     audio_feature = selected_features_small.loc[selected_features_small.index == audio_id]
-    distances, indices = model.kneighbors(audio_feature)
-    return jsonify({'distances': distances.tolist(), 'indices': indices.tolist()}), 200
+    # print(audio_id)
+    # print(audio_feature)
+    distances, indices = all_features_nn.kneighbors(audio_feature)
+    # print(indices[0])
+    # print(i_to_id[indices[0]].to_list())
+    return jsonify({'distances': distances.tolist(), 'indices': i_to_id[indices[0]].to_list()}), 200
 
 
 @app.route('/tracks/<audio_id>/genres')
