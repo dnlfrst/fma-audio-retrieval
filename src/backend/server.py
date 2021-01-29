@@ -78,8 +78,11 @@ def get_all_audio_id():
 @app.route('/tracks/<audio_id>/audio')
 @cache.cached(timeout=0, key_prefix='tracks-audio')
 def get_audio(audio_id):
-    path = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
-    return send_file(path), 200
+    filepath = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
+    if os.path.isfile(filepath):
+        return send_file(filepath), 200
+    else:
+        return 404
 
 
 @app.route('/tracks/<audio_id>/similarities')
