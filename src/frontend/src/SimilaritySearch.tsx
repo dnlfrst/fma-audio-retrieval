@@ -15,10 +15,7 @@ const SimilaritySearch = ({
 
       const { graph } = graphin;
 
-      graph.on("node:click", (event) => {
-        console.log(event.item.getID());
-        setSelectedTrackID(event.item.getID());
-      });
+      graph.on("node:click", (event) => setSelectedTrackID(event.item.getID()));
     },
     [trackID]
   );
