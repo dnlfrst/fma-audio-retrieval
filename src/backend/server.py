@@ -45,7 +45,6 @@ print(f'--- {time.time() - start_time} seconds for data read ---')
 
 # selected_features_small = features
 test = tracks['set', 'split'] == 'test'
-selected_tracks = tracks.loc[test].head(400)
 
 with open(f'{data_path}/all_features_nn.pkl', 'rb') as f:
     all_features_nn = pickle.load(f)
@@ -77,12 +76,12 @@ scaler.fit_transform(timbre_features)
 @app.route('/tracks')
 @cache.cached(timeout=0, key_prefix='tracks')
 def get_all_audio_id():
-    selection = pd.DataFrame([selected_tracks['artist', 'name'],
-                              selected_tracks['album', 'title'],
-                              selected_tracks['track', 'genre_top'],
-                              selected_tracks['track', 'title'],
-                              selected_tracks['track', 'date_created'],
-                              selected_tracks['track', 'interest']]).transpose()
+    selection = pd.DataFrame([tracks['artist', 'name'],
+                              tracks['album', 'title'],
+                              tracks['track', 'genre_top'],
+                              tracks['track', 'title'],
+                              tracks['track', 'date_created'],
+                              tracks['track', 'interest']]).transpose()
     selection.columns = ['artist', 'album', 'genre_top', 'title', 'date_created', 'interest']
     selection['id'] = selection.index
     selection = selection.astype({'date_created': datetime64})
