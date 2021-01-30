@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import HTMLAudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.less";
 import styled from "styled-components";
@@ -10,13 +10,27 @@ const StyledHTMLAudioPlayer = styled(HTMLAudioPlayer)`
   width: 512px;
 `;
 
-const AudioPlayer = ({ trackID }: { trackID: string }) => {
+const AudioPlayer = ({
+  setPlaybackProgress,
+  trackID,
+}: {
+  setPlaybackProgress: Dispatch<SetStateAction<number>>;
+  trackID: string;
+}) => {
   return (
     <Widget>
       <StyledHTMLAudioPlayer
         autoPlay={false}
         autoPlayAfterSrcChange={false}
         layout="stacked-reverse"
+        onEnded={(event) =>
+          setPlaybackProgress(
+            Math.ceil((event.target as HTMLAudioElement).currentTime)
+          )
+        }
+        onListen={(event) =>
+          setPlaybackProgress((event.target as HTMLAudioElement).currentTime)
+        }
         src={
           trackID !== undefined
             ? `http://localhost:5000/tracks/${trackID}/audio`

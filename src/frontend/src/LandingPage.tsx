@@ -69,6 +69,9 @@ const Title = styled.span`
 `;
 
 const LandingPage = () => {
+  const [playbackProgress, setPlaybackProgress] = useState<number | undefined>(
+    0
+  );
   const [playingTrackID, setPlayingTrackID] = useState<string | undefined>();
   const [selectedTrackID, setSelectedTrackID] = useState<string | undefined>();
   const tracks = useTracks();
@@ -118,8 +121,14 @@ const LandingPage = () => {
           selectRandomTrack={selectRandomTrack}
           trackID={selectedTrackID}
         />
-        <AudioPlayer trackID={playingTrackID} />
-        <TrackGenreViewer trackID={playingTrackID} />
+        <AudioPlayer
+          setPlaybackProgress={setPlaybackProgress}
+          trackID={playingTrackID}
+        />
+        <TrackGenreViewer
+          playbackProgress={playbackProgress}
+          trackID={playingTrackID}
+        />
       </CenteredContent>
       <CenteredFooter>
         <Text style={{ fontWeight: "lighter" }} type="secondary">

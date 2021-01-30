@@ -21,7 +21,7 @@ const TrackViewer = ({
 
   return (
     <Widget
-      style={{ left: 75, maxWidth: width }}
+      style={{ left: 75, width }}
       title={
         <Space>
           Track

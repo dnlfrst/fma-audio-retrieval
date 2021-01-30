@@ -8,9 +8,9 @@ import {
 
 const useTrackGenrePredictions = (trackID: string) => {
   const [trackGenrePredictions, setTrackGenrePredictions] = useState<
-    TrackGenrePrediction[]
+    TrackGenrePrediction[] | undefined
   >([]);
-  const { data } = useGet({
+  const { data, error } = useGet({
     path: `/tracks/${trackID}/genres`,
     resolve: (predictions: TrackGenrePredictionFromAPI[]) =>
       predictions
@@ -30,7 +30,10 @@ const useTrackGenrePredictions = (trackID: string) => {
         .flat(),
   });
 
-  useEffect(() => data && setTrackGenrePredictions(data), [data]);
+  useEffect(() => {
+    if (data) setTrackGenrePredictions(data);
+    if (error && error.status === 404) setTrackGenrePredictions(undefined);
+  }, [data, error]);
 
   return trackGenrePredictions;
 };
