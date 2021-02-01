@@ -2,7 +2,7 @@ import pickle
 import time
 
 import sklearn as skl
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, request
 from flask.helpers import send_file
 from flask_caching import Cache
 from flask_cors import CORS
@@ -98,29 +98,60 @@ def get_audio(audio_id):
 def query_audio(audio_id):
     audio_id = int(audio_id)
 
-    all_dist, all_tids = similarities(audio_id, all_features_nn,
-                                      all_features.loc[all_features.index == audio_id])
-    beats_dist, beats_tids = similarities(audio_id, beats_nn,
-                                          beats_features.loc[beats_features.index == audio_id])
-    timbre_dist, timbre_tids = similarities(audio_id, timbre_nn,
-                                            timbre_features.loc[timbre_features.index == audio_id])
+    node_amount = int(request.args.get('nodes'))
+    neigbour_amount = int(request.args.get('neighbors'))
 
-    return jsonify({'all_features': {'distances': all_dist, 'indices': all_tids},
-                    'beats_features': {'distances': beats_dist, 'indices': beats_tids},
-                    'timbre_features': {'distances': timbre_dist, 'indices': timbre_tids},
-                    }), 200
+    query_tids = set() # to restrict the nodes in the graph
+    visited_tids = set() # to avoid same query
+    query_queue = [audio_id]
+    query_result = dict()
+
+    while (len(query_tids) <= node_amount):
+        print(f'########################## {len(visited_tids)} ##############################')
+        audio_id = query_queue.pop(0)
+        print(f'#### query: {audio_id}')
+
+        all_dist, all_tids = similarities(audio_id, all_features_nn,
+                                          all_features.loc[all_features.index == audio_id],
+                                          n=neigbour_amount)
+        beats_dist, beats_tids = similarities(audio_id, beats_nn,
+                                              beats_features.loc[beats_features.index == audio_id],
+                                              n=neigbour_amount)
+        timbre_dist, timbre_tids = similarities(audio_id, timbre_nn,
+                                                timbre_features.loc[timbre_features.index == audio_id],
+                                                n=neigbour_amount)
+
+        visited_tids.add(audio_id)
+        print(f'#### visited: {visited_tids}')
+        print(f'------\nall:{all_tids}\nbeats:{beats_tids}\ntimbre:{timbre_tids}\n--------')
+        query_tids = query_tids.union(all_tids, beats_tids, timbre_tids)
+        print(f'#### got ({len(query_tids)}) nodes')
+        # print(query_tids)
+        query_result[str(audio_id)] = {'all_features': {'distances': all_dist, 'indices': all_tids},
+                                       'beats_features': {'distances': beats_dist, 'indices': beats_tids},
+                                       'timbre_features': {'distances': timbre_dist, 'indices': timbre_tids},}
+
+        for id in list(set().union(all_tids, beats_tids, timbre_tids)):
+            if id not in visited_tids:
+                query_queue.append(id)
+        print(f'#### current queue ({len(query_queue)}):')
+        # print(f'{query_queue}')
+        print("----------------------------------------------------------------------")
+        
+    return jsonify(query_result), 200
 
 
-def similarities(audio_id, model, features):
+def similarities(audio_id, model, features, n=10):
+    if (n > 10): n = 10 # maxium neighbors
     distances, indices = model.kneighbors(features)
     tids = all_i_to_id[indices[0]].to_list()
     distances = distances[0].tolist()
     if int(audio_id) in tids:
-        tids = tids[1:]
-        distances = distances[1:]
+        tids = tids[1:n+1]
+        distances = distances[1:n+1]
     else:
-        tids = tids[:10]
-        distances = distances[:10]
+        tids = tids[:n]
+        distances = distances[:n]
 
     return distances, tids
 
