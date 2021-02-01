@@ -28,13 +28,13 @@ const SimilaritySearch = ({
       {
         id: trackID.toString(),
       },
-      ...trackSimilarities.indices.map((index) => {
+      ...trackSimilarities.all.indices.map((index) => {
         return {
           id: index.toString().padStart(6, "0"),
         };
       }),
     ],
-    edges: trackSimilarities.indices.map((index) => {
+    edges: trackSimilarities.all.indices.map((index) => {
       return {
         source: trackID.toString(),
         target: index.toString().padStart(6, "0"),
