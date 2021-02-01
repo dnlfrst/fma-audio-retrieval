@@ -6,6 +6,14 @@
 
 Download `fma_small` and put it as: `./backend/code/data/fma_small/`
 
+### Frontend
+
+```shell
+cd src/frontend
+npm i
+npm run development
+```
+
 ### Backend
 
 ```shell
