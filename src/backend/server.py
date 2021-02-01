@@ -85,7 +85,6 @@ def get_all_audio_id():
 
 
 @app.route('/tracks/<audio_id>/audio')
-@cache.cached(timeout=0)
 def get_audio(audio_id):
     filepath = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
     if os.path.isfile(filepath):
