@@ -91,7 +91,7 @@ def get_audio(audio_id):
     if os.path.isfile(filepath):
         return send_file(filepath), 200
     else:
-        return 404
+        return abort(404)
 
 
 @app.route('/tracks/<audio_id>/similarities')
