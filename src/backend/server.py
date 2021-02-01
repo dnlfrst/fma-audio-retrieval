@@ -126,8 +126,8 @@ def similarities(audio_id, model, features):
     return distances, tids
 
 
-@cache.cached(timeout=0, key_prefix='duration_genres')
 @app.route('/tracks/<audio_id>/genres')
+@cache.cached(timeout=0)
 def get_audio_duration_predictions(audio_id):
     filepath = f'{data_path}/duration_predictions/{audio_id}_dp.csv'
     if os.path.isfile(filepath):
