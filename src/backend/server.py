@@ -36,12 +36,9 @@ all_features = fma_load(f'{data_path}/features_small.csv')
 beats_features = pd.read_csv(f'{data_path}/beats_features.csv', index_col=0)
 timbre_features = all_features['mfcc']
 tracks = fma_load(f'{data_path}/tracks_small.csv')
-# genres = fma_load(f'{data_path}/genres.csv')
-# echonest = fma_load(f'{data_path}/echonest.csv')
 
 print(f'--- {time.time() - start_time} seconds for data read ---')
 
-# selected_features_small = features
 test = tracks['set', 'split'] == 'test'
 
 with open(f'{data_path}/all_features_nn.pkl', 'rb') as f:
@@ -88,13 +85,12 @@ def get_all_audio_id():
 
 
 @app.route('/tracks/<audio_id>/audio')
-@cache.cached(timeout=0)
 def get_audio(audio_id):
     filepath = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
     if os.path.isfile(filepath):
         return send_file(filepath), 200
     else:
-        return 404
+        return abort(404)
 
 
 @app.route('/tracks/<audio_id>/similarities')
@@ -116,13 +112,9 @@ def query_audio(audio_id):
 
 
 def similarities(audio_id, model, features):
-    # print('########### similarities ###########')
-    # print(features)
-    # print(audio_id)
     distances, indices = model.kneighbors(features)
     tids = all_i_to_id[indices[0]].to_list()
     distances = distances[0].tolist()
-    # if contains self
     if int(audio_id) in tids:
         tids = tids[1:]
         distances = distances[1:]
@@ -133,16 +125,8 @@ def similarities(audio_id, model, features):
     return distances, tids
 
 
-@app.route('/tracks/<audio_id>/genre')
-@cache.cached(timeout=0, key_prefix='tracks-genre')
-def get_audio_genres(audio_id):
-    audio_id = int(audio_id)
-    genre = tracks['track', 'genre_top'].loc[tracks.index == audio_id].values[0]
-    return jsonify({'genre': genre}), 200
-
-
-@app.route('/tracks/<audio_id>/duration_genres')
-@cache.cached(timeout=0, key_prefix='duration_genres')
+@app.route('/tracks/<audio_id>/genres')
+@cache.cached(timeout=0)
 def get_audio_duration_predictions(audio_id):
     filepath = f'{data_path}/duration_predictions/{audio_id}_dp.csv'
     if os.path.isfile(filepath):
