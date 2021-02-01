@@ -13,7 +13,7 @@ const useTracks = () => {
           artist: track.artist,
           date: new Date(track.date_created),
           genre: track.genre_top,
-          ID: track.id,
+          ID: track.id.toString().padStart(6, "0"),
           popularity: track.interest,
           title: track.title,
         };

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "jsx": "react",
     "lib": ["DOM","ES2020"],
     "resolveJsonModule": true

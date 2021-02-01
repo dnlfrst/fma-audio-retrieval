@@ -1,21 +1,19 @@
 import pickle
 import time
-import os
 
-from flask import Flask, jsonify
+import sklearn as skl
+from flask import Flask, jsonify, abort
 from flask.helpers import send_file
 from flask_caching import Cache
 from flask_cors import CORS
 from numpy import datetime64
-import pandas as pd
-from pandas.core import generic
-import sklearn as skl
 
 from utils import *
 
 cache_configuration = {
     "CACHE_TYPE": "simple",
-    "CACHE_DEFAULT_TIMEOUT": 300
+    "CACHE_DEFAULT_TIMEOUT": 300,
+    "CACHE_IGNORE_ERRORS": True
 }
 
 app = Flask(__name__)
@@ -45,7 +43,6 @@ print(f'--- {time.time() - start_time} seconds for data read ---')
 
 # selected_features_small = features
 test = tracks['set', 'split'] == 'test'
-selected_tracks = tracks.loc[test].head(400)
 
 with open(f'{data_path}/all_features_nn.pkl', 'rb') as f:
     all_features_nn = pickle.load(f)
@@ -70,19 +67,20 @@ scaler.fit_transform(all_features)
 scaler.fit_transform(beats_features)
 scaler.fit_transform(timbre_features)
 
+
 #######################################################
 ####################### Routing #######################
 #######################################################
 
 @app.route('/tracks')
-@cache.cached(timeout=0, key_prefix='tracks')
+@cache.cached(timeout=0)
 def get_all_audio_id():
-    selection = pd.DataFrame([selected_tracks['artist', 'name'],
-                              selected_tracks['album', 'title'],
-                              selected_tracks['track', 'genre_top'],
-                              selected_tracks['track', 'title'],
-                              selected_tracks['track', 'date_created'],
-                              selected_tracks['track', 'interest']]).transpose()
+    selection = pd.DataFrame([tracks['artist', 'name'],
+                              tracks['album', 'title'],
+                              tracks['track', 'genre_top'],
+                              tracks['track', 'title'],
+                              tracks['track', 'date_created'],
+                              tracks['track', 'interest']]).transpose()
     selection.columns = ['artist', 'album', 'genre_top', 'title', 'date_created', 'interest']
     selection['id'] = selection.index
     selection = selection.astype({'date_created': datetime64})
@@ -90,7 +88,7 @@ def get_all_audio_id():
 
 
 @app.route('/tracks/<audio_id>/audio')
-@cache.cached(timeout=0, key_prefix='tracks-audio')
+@cache.cached(timeout=0)
 def get_audio(audio_id):
     filepath = f'{fma_small_path}/{audio_id[0:3]}/{audio_id}.mp3'
     if os.path.isfile(filepath):
@@ -100,21 +98,22 @@ def get_audio(audio_id):
 
 
 @app.route('/tracks/<audio_id>/similarities')
-@cache.cached(timeout=0, key_prefix='tracks-similarities')
+@cache.cached(timeout=0)
 def query_audio(audio_id):
     audio_id = int(audio_id)
-    
+
     all_dist, all_tids = similarities(audio_id, all_features_nn,
                                       all_features.loc[all_features.index == audio_id])
     beats_dist, beats_tids = similarities(audio_id, beats_nn,
-                                      beats_features.loc[beats_features.index == audio_id])
+                                          beats_features.loc[beats_features.index == audio_id])
     timbre_dist, timbre_tids = similarities(audio_id, timbre_nn,
-                                      timbre_features.loc[timbre_features.index == audio_id])
+                                            timbre_features.loc[timbre_features.index == audio_id])
 
-    return jsonify({ 'all_features': {'distances': all_dist, 'indices': all_tids},
-                     'beats_features': {'distances': beats_dist, 'indices': beats_tids},
-                     'timbre_features': {'distances': timbre_dist, 'indices': timbre_tids},
+    return jsonify({'all_features': {'distances': all_dist, 'indices': all_tids},
+                    'beats_features': {'distances': beats_dist, 'indices': beats_tids},
+                    'timbre_features': {'distances': timbre_dist, 'indices': timbre_tids},
                     }), 200
+
 
 def similarities(audio_id, model, features):
     # print('########### similarities ###########')
@@ -130,8 +129,9 @@ def similarities(audio_id, model, features):
     else:
         tids = tids[:10]
         distances = distances[:10]
-    
+
     return distances, tids
+
 
 @app.route('/tracks/<audio_id>/genre')
 @cache.cached(timeout=0, key_prefix='tracks-genre')
@@ -139,6 +139,7 @@ def get_audio_genres(audio_id):
     audio_id = int(audio_id)
     genre = tracks['track', 'genre_top'].loc[tracks.index == audio_id].values[0]
     return jsonify({'genre': genre}), 200
+
 
 @app.route('/tracks/<audio_id>/duration_genres')
 @cache.cached(timeout=0, key_prefix='duration_genres')
@@ -148,4 +149,4 @@ def get_audio_duration_predictions(audio_id):
         df = pd.read_csv(filepath)
         return jsonify(df.to_dict(orient='records')), 200
     else:
-        return 404
+        return abort(404)

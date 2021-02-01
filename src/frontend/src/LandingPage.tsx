@@ -1,11 +1,12 @@
-import { GithubFilled } from "@ant-design/icons";
-import { Button, Layout, PageHeader, Typography } from "antd";
-import React, { useState } from "react";
+import { GithubFilled, LoadingOutlined } from "@ant-design/icons";
+import { Button, Layout, PageHeader, Spin, Typography } from "antd";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
-import Statistics from "./Statistics";
-import TrackList from "./TrackList";
+import TrackGenreViewer from "./TrackGenreViewer";
+import TrackViewer from "./TrackViewer";
+import useTracks from "./useTracks";
 
 const { Content, Footer, Header } = Layout;
 const { Link, Text } = Typography;
@@ -15,12 +16,24 @@ const AdaptiveHeader = styled(Header)`
 `;
 
 const CenteredContent = styled(Content)`
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 25px;
   padding-left: 75px;
   padding-right: 75px;
+  position: relative;
 `;
 
 const CenteredFooter = styled(Footer)`
+  background-color: white;
   text-align: center;
+`;
+
+const CenteredSpin = styled(Spin)`
+  align-items: center;
+  display: flex;
+  justify-content: center;
 `;
 
 const ColoredLink = styled(Link)`
@@ -45,13 +58,6 @@ const GitHubLink = () => (
   />
 );
 
-const Grid = styled.div`
-  display: grid;
-  grid-gap: 8px;
-  grid-template-areas: "statistics similaritySearch" "trackList similaritySearch" "trackList audioPlayer";
-  grid-template-columns: 1fr 1fr;
-`;
-
 const Title = styled.span`
   color: var(--layout-header-color);
   font-weight: bold;
@@ -63,8 +69,26 @@ const Title = styled.span`
 `;
 
 const LandingPage = () => {
-  const [isPlaying, setIsPLaying] = useState<boolean>(false);
-  const [playingTrackID, setPlayingTrackID] = useState<number | undefined>();
+  const [playbackProgress, setPlaybackProgress] = useState<number | undefined>(
+    0
+  );
+  const [playingTrackID, setPlayingTrackID] = useState<string | undefined>();
+  const [selectedTrackID, setSelectedTrackID] = useState<string | undefined>();
+  const tracks = useTracks();
+
+  const selectRandomTrack = () => {
+    const randomTrackID =
+      tracks?.[Math.floor(Math.random() * tracks.length)].ID;
+
+    setPlayingTrackID(randomTrackID);
+    setSelectedTrackID(randomTrackID);
+  };
+
+  useEffect(() => {
+    if (tracks?.length === 0) return;
+
+    selectRandomTrack();
+  }, [tracks]);
 
   return (
     <FullSizeLayout>
@@ -85,21 +109,26 @@ const LandingPage = () => {
         />
       </AdaptiveHeader>
       <CenteredContent>
-        <Grid>
-          <Statistics />
-          <SimilaritySearch />
-          <TrackList
-            isPlaying={isPlaying}
-            playingTrackID={playingTrackID}
-            setIsPlaying={setIsPLaying}
-            setPlayingTrackID={setPlayingTrackID}
+        {selectedTrackID ? (
+          <SimilaritySearch
+            setSelectedTrackID={setSelectedTrackID}
+            trackID={selectedTrackID}
           />
-          <AudioPlayer
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPLaying}
-            trackID={playingTrackID}
-          />
-        </Grid>
+        ) : (
+          <CenteredSpin indicator={<LoadingOutlined />} />
+        )}
+        <TrackViewer
+          selectRandomTrack={selectRandomTrack}
+          trackID={selectedTrackID}
+        />
+        <AudioPlayer
+          setPlaybackProgress={setPlaybackProgress}
+          trackID={playingTrackID}
+        />
+        <TrackGenreViewer
+          playbackProgress={playbackProgress}
+          trackID={playingTrackID}
+        />
       </CenteredContent>
       <CenteredFooter>
         <Text style={{ fontWeight: "lighter" }} type="secondary">
