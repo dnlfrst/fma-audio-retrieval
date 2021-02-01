@@ -1,6 +1,5 @@
 import pickle
 import time
-import os
 
 from flask import Flask, jsonify, abort
 from flask.helpers import send_file
@@ -15,7 +14,8 @@ from utils import *
 
 cache_configuration = {
     "CACHE_TYPE": "simple",
-    "CACHE_DEFAULT_TIMEOUT": 300
+    "CACHE_DEFAULT_TIMEOUT": 300,
+    "CACHE_IGNORE_ERRORS": True
 }
 
 app = Flask(__name__)
