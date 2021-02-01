@@ -10,7 +10,8 @@ const useTrackGenrePredictions = (trackID: string) => {
   const [trackGenrePredictions, setTrackGenrePredictions] = useState<
     TrackGenrePrediction[] | undefined
   >([]);
-  const { data, error } = useGet({
+  const { data, error, refetch } = useGet({
+    lazy: true,
     path: `/tracks/${trackID}/genres`,
     resolve: (predictions: TrackGenrePredictionFromAPI[]) =>
       predictions
@@ -29,6 +30,10 @@ const useTrackGenrePredictions = (trackID: string) => {
         })
         .flat(),
   });
+
+  useEffect(() => {
+    if (trackID) refetch().then();
+  }, [trackID]);
 
   useEffect(() => {
     if (data) setTrackGenrePredictions(data);
