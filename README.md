@@ -35,12 +35,7 @@ env FLASK_APP=server.py python -m flask run --eager-loading
     ├── backend
     └── frontend
 ```
-## Use Cases
 
-### Single-Sample Query (SSQ)
+## Use Case
 
-As a user, I would like to find other songs that are similar to a song that I like.
-
-### Multiple-Samples Query (MSQ)
-
-As a user, I would like to receive a playlist with songs that are similar to the ones in a playlist that I like.
+As a user, I would like to find a number of other songs that are similar to a song that I like.
