@@ -126,16 +126,8 @@ def similarities(audio_id, model, features):
     return distances, tids
 
 
-@app.route('/tracks/<audio_id>/genre')
-@cache.cached(timeout=0, key_prefix='tracks-genre')
-def get_audio_genres(audio_id):
-    audio_id = int(audio_id)
-    genre = tracks['track', 'genre_top'].loc[tracks.index == audio_id].values[0]
-    return jsonify({'genre': genre}), 200
-
-
-@app.route('/tracks/<audio_id>/duration_genres')
 @cache.cached(timeout=0, key_prefix='duration_genres')
+@app.route('/tracks/<audio_id>/genres')
 def get_audio_duration_predictions(audio_id):
     filepath = f'{data_path}/duration_predictions/{audio_id}_dp.csv'
     if os.path.isfile(filepath):
