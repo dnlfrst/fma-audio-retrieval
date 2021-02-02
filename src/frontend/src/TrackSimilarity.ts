@@ -19,8 +19,8 @@ export interface TrackSimilarity {
   indices: string[];
 }
 
-export enum TrackSimilarityFeatures {
-  BEAT = "beat",
+export enum TrackSimilarityFeature {
   COMBINED = "all",
+  BEAT = "beat",
   TIMBRE = "timbre",
 }

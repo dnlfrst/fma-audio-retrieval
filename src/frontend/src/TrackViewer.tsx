@@ -1,6 +1,6 @@
 import { LoadingOutlined, SwapOutlined } from "@ant-design/icons";
 import { Button, Rate, Space, Spin, Tag, Typography } from "antd";
-import { ScaleLinear, scaleLinear, scaleLog } from "d3-scale";
+import { ScaleLinear, scaleLinear } from "d3-scale";
 import React from "react";
 import styled from "styled-components";
 import getColorForGenre from "./colors";

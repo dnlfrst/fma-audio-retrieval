@@ -12,10 +12,11 @@ import React, { useEffect, useState } from "react";
 import { useMeasure } from "react-use";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
-import Legend from "./Legend";
+import Settings from "./Settings";
 import SimilaritySearch from "./SimilaritySearch";
 import { Track } from "./Track";
 import TrackGenreViewer from "./TrackGenreViewer";
+import { TrackSimilarityFeature } from "./TrackSimilarity";
 import TrackViewer from "./TrackViewer";
 import useTracks from "./useTracks";
 
@@ -78,11 +79,17 @@ const Title = styled.span`
 const LandingPage = () => {
   const [displayedTracks, setDisplayedTracks] = useState<Track[]>();
   const [hoveredTrackID, setHoveredTrackID] = useState<string | undefined>();
+  const [numberOfNodes, setNumberOfNodes] = useState<number>(200);
+  const [numberOfNeighbors, setNumberOfNeighbors] = useState<number>(10);
   const [playbackProgress, setPlaybackProgress] = useState<number | undefined>(
     0
   );
   const [playingTrackID, setPlayingTrackID] = useState<string | undefined>();
   const [selectedTrackID, setSelectedTrackID] = useState<string | undefined>();
+  const [
+    similarityFeature,
+    setSimilarityFeature,
+  ] = useState<TrackSimilarityFeature>(TrackSimilarityFeature.COMBINED);
   const tracks = useTracks();
   const [wrapper, { height, width }] = useMeasure();
 
@@ -118,14 +125,24 @@ const LandingPage = () => {
         />
       </AdaptiveHeader>
       <CenteredContent>
-        <Legend />
+        <Settings
+          numberOfNodes={numberOfNodes}
+          numberOfNeighbors={numberOfNeighbors}
+          similarityFeature={similarityFeature}
+          setNumberOfNodes={setNumberOfNodes}
+          setNumberOfNeighbors={setNumberOfNeighbors}
+          setSimilarityFeature={setSimilarityFeature}
+        />
         <div ref={wrapper} style={{ flex: 1 }}>
           {selectedTrackID ? (
             <SimilaritySearch
               height={height}
+              numberOfTracks={numberOfNodes}
+              numberOfSimilarTracks={numberOfNeighbors}
               setDisplayedTracks={setDisplayedTracks}
               setHoveredTrackID={setHoveredTrackID}
               setSelectedTrackID={setSelectedTrackID}
+              similarityFeature={similarityFeature}
               trackID={selectedTrackID}
               width={width}
             />

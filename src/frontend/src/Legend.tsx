@@ -1,14 +1,11 @@
-import { Col, Row, Tag } from "antd";
+import { Tag } from "antd";
 import React from "react";
 import styled from "styled-components";
 import getColorForGenre from "./colors";
+import FlexibleWrapper from "./FlexibleWrapper";
+import RotatedLabel from "./RotatedLabel";
 import { Genre } from "./TrackGenrePrediction";
 import Widget from "./Widget";
-
-const FlexibleWrapper = styled.div`
-  align-items: center;
-  display: flex;
-`;
 
 const Grid = styled.div`
   display: grid;
@@ -28,17 +25,7 @@ const Legend = () => {
       title="Legend"
     >
       <FlexibleWrapper>
-        <span
-          style={{
-            color: "grey",
-            fontSize: "small",
-            marginRight: 10,
-            transform: "rotate(-180deg)",
-            writingMode: "vertical-lr",
-          }}
-        >
-          Genres
-        </span>
+        <RotatedLabel>Genres</RotatedLabel>
         <Grid>
           {Object.values(Genre).map((genre) => (
             <div style={{ textAlign: "center" }}>

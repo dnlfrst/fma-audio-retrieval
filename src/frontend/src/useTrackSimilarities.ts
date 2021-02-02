@@ -6,13 +6,17 @@ import {
   TrackSimilarity,
 } from "./TrackSimilarity";
 
-const useTrackSimilarities = (trackID: string) => {
+const useTrackSimilarities = (
+  trackID: string,
+  numberOfTracks: number,
+  numberOfSimilarTracks: number
+) => {
   const [
     trackSimilarities,
     setTrackSimilarities,
   ] = useState<TrackSimilarities>();
   const { data } = useGet<TrackSimilarities>({
-    path: `/tracks/${trackID}/similarities?nodes=200&neighbors=10`,
+    path: `/tracks/${trackID}/similarities?nodes=${numberOfTracks}&neighbors=${numberOfSimilarTracks}`,
     resolve: (trackSimilarities: TrackSimilaritiesFromAPI) => {
       const formattedTrackSimilarities: TrackSimilarities = {};
 

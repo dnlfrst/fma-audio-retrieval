@@ -4,6 +4,7 @@ import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import getColorForGenre from "./colors";
 import { Track } from "./Track";
 import { Genre } from "./TrackGenrePrediction";
+import { TrackSimilarityFeature } from "./TrackSimilarity";
 import useTracks from "./useTracks";
 import useTrackSimilarities from "./useTrackSimilarities";
 
@@ -44,35 +45,47 @@ G6.registerNode(
 
 const SimilaritySearch = ({
   height,
+  numberOfTracks,
+  numberOfSimilarTracks,
   setDisplayedTracks,
   setHoveredTrackID,
   setSelectedTrackID,
+  similarityFeature,
   trackID,
   width,
 }: {
   height: number;
+  numberOfTracks: number;
+  numberOfSimilarTracks: number;
   setDisplayedTracks: Dispatch<SetStateAction<Track[]>>;
   setHoveredTrackID: Dispatch<SetStateAction<string>>;
   setSelectedTrackID: Dispatch<SetStateAction<string>>;
+  similarityFeature: TrackSimilarityFeature;
   trackID: string;
   width: number;
 }) => {
   const [graph, setGraph] = useState<Graph>();
   const tracks = useTracks();
-  const trackSimilarities = useTrackSimilarities(trackID);
+  const trackSimilarities = useTrackSimilarities(
+    trackID,
+    numberOfTracks,
+    numberOfSimilarTracks
+  );
 
   const container = useCallback(
     (element: HTMLDivElement) => {
       if (!trackID || !tracks || !trackSimilarities || !element) return;
 
       const distances = Object.values(trackSimilarities)
-        .map((trackSimilarity) => trackSimilarity.all.distances)
+        .map((trackSimilarity) => trackSimilarity[similarityFeature].distances)
         .flat();
       const nodes = Array.from(
         new Set(
           Object.keys(trackSimilarities).concat(
             Object.values(trackSimilarities)
-              .map((trackSimilarity) => trackSimilarity.all.indices)
+              .map(
+                (trackSimilarity) => trackSimilarity[similarityFeature].indices
+              )
               .flat()
           )
         )
@@ -140,9 +153,10 @@ const SimilaritySearch = ({
         ],
         edges: Object.keys(trackSimilarities)
           .map((id) => {
-            const distances = trackSimilarities[id].all.distances;
+            const distances =
+              trackSimilarities[id][similarityFeature].distances;
 
-            return trackSimilarities[id].all.indices.map(
+            return trackSimilarities[id][similarityFeature].indices.map(
               (index, trackIndex) => {
                 const distance = distances[trackIndex];
                 const scaledThickness = thicknessScale(distance);
@@ -172,13 +186,15 @@ const SimilaritySearch = ({
               const sourceID = edge.source.id;
               const targetID = edge.target.id;
 
-              const targetIndex = trackSimilarities[
-                sourceID
-              ]?.all.indices.indexOf(targetID);
+              const targetIndex = trackSimilarities[sourceID]?.[
+                similarityFeature
+              ].indices.indexOf(targetID);
 
               return (
                 distanceScale(
-                  trackSimilarities[sourceID]?.all.distances[targetIndex]
+                  trackSimilarities[sourceID]?.[similarityFeature].distances[
+                    targetIndex
+                  ]
                 ) ?? 25
               );
             },
@@ -209,7 +225,7 @@ const SimilaritySearch = ({
         setGraph(graph);
       }
     },
-    [trackID, tracks, trackSimilarities]
+    [similarityFeature, trackID, tracks, trackSimilarities]
   );
 
   return <div ref={container} style={{ height: "100%", width: "100%" }} />;

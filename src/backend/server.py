@@ -94,7 +94,6 @@ def get_audio(audio_id):
 
 
 @app.route('/tracks/<audio_id>/similarities')
-@cache.cached(timeout=0)
 def query_audio(audio_id):
     audio_id = int(audio_id)
 
