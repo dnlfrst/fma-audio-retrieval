@@ -75,7 +75,7 @@ const TrackViewer = ({
       {selectedTrack ? (
         <>
           <AttributedTitle level={3}>
-            <Text ellipsis style={{ maxWidth: widthWithoutPadding / 2 }}>
+            <Text ellipsis style={{ maxWidth: widthWithoutPadding * (3 / 7) }}>
               {selectedTrack.title}
             </Text>
             <FlexibleContainer>
