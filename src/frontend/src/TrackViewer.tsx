@@ -1,11 +1,11 @@
 import { LoadingOutlined, SwapOutlined } from "@ant-design/icons";
 import { Button, Rate, Space, Spin, Tag, Typography } from "antd";
-import { scaleLinear, scaleLog } from "d3-scale";
+import { ScaleLinear, scaleLinear, scaleLog } from "d3-scale";
 import React from "react";
 import styled from "styled-components";
 import getColorForGenre from "./colors";
+import { Track } from "./Track";
 import { Genre } from "./TrackGenrePrediction";
-import useTracks from "./useTracks";
 import Widget from "./Widget";
 
 const { Text, Title } = Typography;
@@ -32,24 +32,28 @@ const FlexibleContainer = styled.div`
 `;
 
 const TrackViewer = ({
+  displayedTracks,
   selectRandomTrack,
   trackID,
 }: {
+  displayedTracks: Track[];
   selectRandomTrack: () => void;
   trackID: string;
 }) => {
-  const tracks = useTracks();
-  const minimumPopularity = Math.min(
-    ...tracks.map((track) => track.popularity)
-  );
-  const maximumPopularity = Math.max(
-    ...tracks.map((track) => track.popularity)
-  );
-  const popularityScale = scaleLog()
-    .domain([minimumPopularity, maximumPopularity])
-    .range([0, 5]);
+  let popularityScale: ScaleLinear<number, number>;
+  if (displayedTracks) {
+    const minimumPopularity = Math.min(
+      ...displayedTracks.map((track) => track.popularity)
+    );
+    const maximumPopularity = Math.max(
+      ...displayedTracks.map((track) => track.popularity)
+    );
+    popularityScale = scaleLinear()
+      .domain([minimumPopularity, maximumPopularity])
+      .range([0, 5]);
+  }
 
-  const selectedTrack = tracks?.find((track) => track.ID === trackID);
+  const selectedTrack = displayedTracks?.find((track) => track.ID === trackID);
   const width = 450;
   const widthWithoutPadding = width - 2 * 24;
 
@@ -82,7 +86,7 @@ const TrackViewer = ({
                   {selectedTrack.genre}
                 </Tag>
               ) : null}
-              {selectedTrack.popularity !== undefined ? (
+              {selectedTrack.popularity !== undefined && popularityScale ? (
                 <CompactRating
                   disabled
                   value={popularityScale(selectedTrack.popularity)}

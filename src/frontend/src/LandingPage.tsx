@@ -5,6 +5,7 @@ import { useMeasure } from "react-use";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
+import { Track } from "./Track";
 import TrackGenreViewer from "./TrackGenreViewer";
 import TrackViewer from "./TrackViewer";
 import useTracks from "./useTracks";
@@ -70,6 +71,7 @@ const Title = styled.span`
 `;
 
 const LandingPage = () => {
+  const [displayedTracks, setDisplayedTracks] = useState<Track[]>();
   const [hoveredTrackID, setHoveredTrackID] = useState<string | undefined>();
   const [playbackProgress, setPlaybackProgress] = useState<number | undefined>(
     0
@@ -116,6 +118,7 @@ const LandingPage = () => {
           {selectedTrackID ? (
             <SimilaritySearch
               height={height}
+              setDisplayedTracks={setDisplayedTracks}
               setHoveredTrackID={setHoveredTrackID}
               setSelectedTrackID={setSelectedTrackID}
               trackID={selectedTrackID}
@@ -126,6 +129,7 @@ const LandingPage = () => {
           )}
         </div>
         <TrackViewer
+          displayedTracks={displayedTracks}
           selectRandomTrack={selectRandomTrack}
           trackID={hoveredTrackID || selectedTrackID}
         />

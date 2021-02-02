@@ -2,18 +2,21 @@ import { Graph } from "@antv/g6";
 import { scaleLinear, scaleLog } from "d3-scale";
 import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import getColorForGenre from "./colors";
+import { Track } from "./Track";
 import { Genre } from "./TrackGenrePrediction";
 import useTracks from "./useTracks";
 import useTrackSimilarities from "./useTrackSimilarities";
 
 const SimilaritySearch = ({
   height,
+  setDisplayedTracks,
   setHoveredTrackID,
   setSelectedTrackID,
   trackID,
   width,
 }: {
   height: number;
+  setDisplayedTracks: Dispatch<SetStateAction<Track[]>>;
   setHoveredTrackID: Dispatch<SetStateAction<string>>;
   setSelectedTrackID: Dispatch<SetStateAction<string>>;
   trackID: string;
@@ -40,6 +43,8 @@ const SimilaritySearch = ({
         )
       );
 
+      setDisplayedTracks(tracks.filter((track) => nodes.includes(track.ID)));
+
       const rootGenre: Genre = tracks.find((track) => track.ID === trackID)
         ?.genre as Genre;
       const rootColor = getColorForGenre(rootGenre);
@@ -57,12 +62,16 @@ const SimilaritySearch = ({
         .range([3, 0.5]);
 
       const minimumPopularity = Math.min(
-        ...tracks.map((track) => track.popularity)
+        ...tracks
+          .filter((track) => nodes.includes(track.ID))
+          .map((track) => track.popularity)
       );
       const maximumPopularity = Math.max(
-        ...tracks.map((track) => track.popularity)
+        ...tracks
+          .filter((track) => nodes.includes(track.ID))
+          .map((track) => track.popularity)
       );
-      const popularityScale = scaleLog()
+      const popularityScale = scaleLinear()
         .domain([minimumPopularity, maximumPopularity])
         .range([5, 10]);
 
