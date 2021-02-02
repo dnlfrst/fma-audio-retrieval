@@ -19,7 +19,7 @@ const Legend = () => {
       style={{
         height: "max-content",
         right: 75,
-        top: 0,
+        top: 335,
         width: 450,
       }}
       title="Legend"

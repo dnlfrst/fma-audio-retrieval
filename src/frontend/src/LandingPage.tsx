@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useMeasure } from "react-use";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
+import Legend from "./Legend";
 import Settings from "./Settings";
 import SimilaritySearch from "./SimilaritySearch";
 import { Track } from "./Track";
@@ -133,6 +134,7 @@ const LandingPage = () => {
           setNumberOfNeighbors={setNumberOfNeighbors}
           setSimilarityFeature={setSimilarityFeature}
         />
+        <Legend />
         <div ref={wrapper} style={{ flex: 1 }}>
           {selectedTrackID ? (
             <SimilaritySearch
