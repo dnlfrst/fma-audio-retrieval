@@ -3,6 +3,7 @@ import { useGet } from "restful-react";
 import {
   TrackSimilarities,
   TrackSimilaritiesFromAPI,
+  TrackSimilarity,
 } from "../TrackSimilarity";
 
 const useTrackSimilarities = (trackID: string) => {
@@ -11,13 +12,43 @@ const useTrackSimilarities = (trackID: string) => {
     setTrackSimilarities,
   ] = useState<TrackSimilarities>();
   const { data } = useGet<TrackSimilarities>({
-    path: `/tracks/${trackID}/similarities`,
+    path: `/tracks/${trackID}/similarities?nodes=400&neighbors=10`,
     resolve: (trackSimilarities: TrackSimilaritiesFromAPI) => {
-      return {
-        all: trackSimilarities.all_features,
-        beat: trackSimilarities.beats_features,
-        timbre: trackSimilarities.timbre_features,
-      };
+      const formattedTrackSimilarities: TrackSimilarities = {};
+
+      Object.entries(trackSimilarities).forEach(
+        ([id, features]: [
+          string,
+          {
+            all_features: TrackSimilarity;
+            beats_features: TrackSimilarity;
+            timbre_features: TrackSimilarity;
+          }
+        ]) => {
+          formattedTrackSimilarities[id.padStart(6, "0")] = {
+            all: {
+              ...features.all_features,
+              indices: features.all_features.indices.map((index) =>
+                index.toString().padStart(6, "0")
+              ),
+            },
+            beat: {
+              ...features.beats_features,
+              indices: features.beats_features.indices.map((index) =>
+                index.toString().padStart(6, "0")
+              ),
+            },
+            timbre: {
+              ...features.timbre_features,
+              indices: features.timbre_features.indices.map((index) =>
+                index.toString().padStart(6, "0")
+              ),
+            },
+          };
+        }
+      );
+
+      return formattedTrackSimilarities;
     },
   });
 

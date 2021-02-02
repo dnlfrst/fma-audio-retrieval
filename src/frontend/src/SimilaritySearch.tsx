@@ -28,14 +28,27 @@ const SimilaritySearch = ({
 
   if (!trackID || !tracks || !trackSimilarities) return null;
 
+  const distances = Object.values(trackSimilarities)
+    .map((trackSimilarity) => trackSimilarity.all.distances)
+    .flat();
+  const nodes = Array.from(
+    new Set(
+      Object.keys(trackSimilarities).concat(
+        Object.values(trackSimilarities)
+          .map((trackSimilarity) => trackSimilarity.all.indices)
+          .flat()
+      )
+    )
+  );
+
   const rootGenre: Genre = tracks.find((track) => track.ID === trackID)
     ?.genre as Genre;
   const rootColor = getColorForGenre(rootGenre);
   const rootPopularity: number = tracks.find((track) => track.ID === trackID)
     ?.popularity;
 
-  const minimumDistance = Math.min(...trackSimilarities.all.distances);
-  const maximumDistance = Math.max(...trackSimilarities.all.distances);
+  const minimumDistance = Math.min(...distances);
+  const maximumDistance = Math.max(...distances);
   const thicknessScale = scaleLinear()
     .domain([minimumDistance, maximumDistance])
     .range([5, 1]);
@@ -62,8 +75,7 @@ const SimilaritySearch = ({
           },
         },
       },
-      ...trackSimilarities.all.indices.map((index) => {
-        const id = index.toString().padStart(6, "0");
+      ...nodes.map((id) => {
         const genre: Genre = tracks.find((track) => track.ID === id)
           ?.genre as Genre;
         const popularity: number = tracks.find((track) => track.ID === id)
@@ -82,23 +94,32 @@ const SimilaritySearch = ({
         };
       }),
     ],
-    edges: trackSimilarities.all.indices.map((index, trackIndex) => {
-      const similarity = trackSimilarities.all.distances[trackIndex];
+    edges: Object.keys(trackSimilarities)
+      .map((id) => {
+        const distances = trackSimilarities[id].all.distances;
 
-      return {
-        source: trackID.toString(),
-        style: {
-          keyshape: {
-            lineWidth: thicknessScale(similarity),
-          },
-          label: {
-            value: similarity.toFixed(2),
-          },
-        },
-        target: index.toString().padStart(6, "0"),
-      };
-    }),
+        return trackSimilarities[id].all.indices.map((index, trackIndex) => {
+          const distance = distances[trackIndex];
+          const scaledDistance = thicknessScale(distance);
+
+          return {
+            source: id,
+            style: {
+              keyshape: {
+                lineWidth: scaledDistance,
+              },
+              label: {
+                value: scaledDistance.toFixed(2),
+              },
+            },
+            target: index,
+          };
+        });
+      })
+      .flat(),
   };
+
+  console.log(nodes.length);
 
   return (
     <Graphin
@@ -116,6 +137,7 @@ const SimilaritySearch = ({
         },
       }}
       layout={{
+        minNodeSpacing: 20,
         type: "concentric",
       }}
       ref={graphin}
