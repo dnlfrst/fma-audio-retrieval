@@ -70,6 +70,7 @@ const Title = styled.span`
 `;
 
 const LandingPage = () => {
+  const [hoveredTrackID, setHoveredTrackID] = useState<string | undefined>();
   const [playbackProgress, setPlaybackProgress] = useState<number | undefined>(
     0
   );
@@ -115,6 +116,7 @@ const LandingPage = () => {
           {selectedTrackID ? (
             <SimilaritySearch
               height={height}
+              setHoveredTrackID={setHoveredTrackID}
               setSelectedTrackID={setSelectedTrackID}
               trackID={selectedTrackID}
               width={width}
@@ -125,7 +127,7 @@ const LandingPage = () => {
         </div>
         <TrackViewer
           selectRandomTrack={selectRandomTrack}
-          trackID={selectedTrackID}
+          trackID={hoveredTrackID || selectedTrackID}
         />
         <AudioPlayer
           setPlaybackProgress={setPlaybackProgress}

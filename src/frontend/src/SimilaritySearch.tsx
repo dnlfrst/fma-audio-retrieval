@@ -1,6 +1,6 @@
 import { Graph } from "@antv/g6";
 import { scaleLinear, scaleLog } from "d3-scale";
-import React, { useCallback, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import getColorForGenre from "./colors";
 import { Genre } from "./TrackGenrePrediction";
 import useTracks from "./useTracks";
@@ -8,12 +8,14 @@ import useTrackSimilarities from "./useTrackSimilarities";
 
 const SimilaritySearch = ({
   height,
+  setHoveredTrackID,
   setSelectedTrackID,
   trackID,
   width,
 }: {
   height: number;
-  setSelectedTrackID: (trackID: string) => void;
+  setHoveredTrackID: Dispatch<SetStateAction<string>>;
+  setSelectedTrackID: Dispatch<SetStateAction<string>>;
   trackID: string;
   width: number;
 }) => {
@@ -121,6 +123,11 @@ const SimilaritySearch = ({
         graph.on("node:click", (event) =>
           setSelectedTrackID(event.item.getID())
         );
+        graph.on("node:mouseenter", (event) =>
+          setHoveredTrackID(event.item.getID())
+        );
+        graph.on("node:mouseleave", () => setHoveredTrackID(undefined));
+
         graph.data(data);
         graph.render();
 
