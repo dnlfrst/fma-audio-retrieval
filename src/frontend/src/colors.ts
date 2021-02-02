@@ -20,4 +20,7 @@ const getColorForGenre = (genre?: Genre): { fill: string; stroke: string } => {
   }
 };
 
+export const getGenreColors = () =>
+  Object.values(Genre).map((genre) => getColorForGenre(genre).fill);
+
 export default getColorForGenre;
