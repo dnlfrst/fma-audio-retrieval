@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useMeasure } from "react-use";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
+import Legend from "./Legend";
 import SimilaritySearch from "./SimilaritySearch";
 import { Track } from "./Track";
 import TrackGenreViewer from "./TrackGenreViewer";
@@ -117,6 +118,7 @@ const LandingPage = () => {
         />
       </AdaptiveHeader>
       <CenteredContent>
+        <Legend />
         <div ref={wrapper} style={{ flex: 1 }}>
           {selectedTrackID ? (
             <SimilaritySearch
