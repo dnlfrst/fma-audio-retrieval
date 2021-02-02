@@ -52,6 +52,9 @@ const SimilaritySearch = ({
       const distanceScale = scaleLinear()
         .domain([minimumDistance, maximumDistance])
         .range([50, 100]);
+      const thicknessScale = scaleLinear()
+        .domain([minimumDistance, maximumDistance])
+        .range([3, 0.5]);
 
       const minimumPopularity = Math.min(
         ...tracks.map((track) => track.popularity)
@@ -91,10 +94,13 @@ const SimilaritySearch = ({
             return trackSimilarities[id].all.indices.map(
               (index, trackIndex) => {
                 const distance = distances[trackIndex];
-                const scaledDistance = distanceScale(distance);
+                const scaledThickness = thicknessScale(distance);
 
                 return {
                   source: id,
+                  style: {
+                    lineWidth: scaledThickness,
+                  },
                   target: index,
                 };
               }
