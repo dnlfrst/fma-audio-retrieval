@@ -101,12 +101,14 @@ def query_audio(audio_id):
     node_amount = int(request.args.get('nodes'))
     neigbour_amount = int(request.args.get('neighbors'))
 
-    query_tids = set() # to restrict the nodes in the graph
+    query_tids_all = set() # to restrict the nodes in the graph
+    query_tids_beats = set()
+    query_tids_timbre = set()
     visited_tids = set() # to avoid same query
     query_queue = [audio_id]
     query_result = dict()
 
-    while (len(query_tids) <= node_amount):
+    while (min(len(query_tids_all), len(query_tids_timbre), len(query_tids_beats)) <= node_amount):
         print(f'########################## {len(visited_tids)} ##############################')
         audio_id = query_queue.pop(0)
         print(f'#### query: {audio_id}')
@@ -124,9 +126,15 @@ def query_audio(audio_id):
         visited_tids.add(audio_id)
         print(f'#### visited: {visited_tids}')
         print(f'------\nall:{all_tids}\nbeats:{beats_tids}\ntimbre:{timbre_tids}\n--------')
-        query_tids = query_tids.union(all_tids, beats_tids, timbre_tids)
-        print(f'#### got ({len(query_tids)}) nodes')
-        # print(query_tids)
+
+        query_tids_all = query_tids_all.union(all_tids)
+        query_tids_beats = query_tids_beats.union(beats_tids)
+        query_tids_timbre = query_tids_timbre.union(timbre_tids)
+
+        print(f'#### got ({len(query_tids_all)}) nodes for all features')
+        print(f'#### got ({len(query_tids_beats)}) nodes for beats features')
+        print(f'#### got ({len(query_tids_timbre)}) nodes for timbre features')
+
         query_result[str(audio_id)] = {'all_features': {'distances': all_dist, 'indices': all_tids},
                                        'beats_features': {'distances': beats_dist, 'indices': beats_tids},
                                        'timbre_features': {'distances': timbre_dist, 'indices': timbre_tids},}
