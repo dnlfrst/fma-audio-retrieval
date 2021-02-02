@@ -132,7 +132,12 @@ const SimilaritySearch = ({
             type: "force",
           },
           modes: {
-            default: ["drag-canvas", "zoom-canvas", "drag-node"],
+            default: [
+              "activate-relations",
+              "drag-canvas",
+              "drag-node",
+              "zoom-canvas",
+            ],
           },
           width,
         });
