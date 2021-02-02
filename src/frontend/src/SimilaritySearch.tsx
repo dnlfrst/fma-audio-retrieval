@@ -56,10 +56,10 @@ const SimilaritySearch = ({
       const maximumDistance = Math.max(...distances);
       const distanceScale = scaleLinear()
         .domain([minimumDistance, maximumDistance])
-        .range([50, 100]);
+        .range([25, 50]);
       const thicknessScale = scaleLinear()
         .domain([minimumDistance, maximumDistance])
-        .range([3, 0.5]);
+        .range([3.5, 0.5]);
 
       const minimumPopularity = Math.min(
         ...tracks
