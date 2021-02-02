@@ -12,7 +12,7 @@ const useTrackSimilarities = (trackID: string) => {
     setTrackSimilarities,
   ] = useState<TrackSimilarities>();
   const { data } = useGet<TrackSimilarities>({
-    path: `/tracks/${trackID}/similarities?nodes=400&neighbors=10`,
+    path: `/tracks/${trackID}/similarities?nodes=200&neighbors=10`,
     resolve: (trackSimilarities: TrackSimilaritiesFromAPI) => {
       const formattedTrackSimilarities: TrackSimilarities = {};
 
