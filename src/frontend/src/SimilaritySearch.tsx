@@ -117,6 +117,18 @@ const SimilaritySearch = ({
           height,
           fitViewPadding: 250,
           layout: {
+            linkDistance: (edge) => {
+              const sourceID = edge.source.id;
+              const targetID = edge.target.id;
+
+              const targetIndex = trackSimilarities[
+                sourceID
+              ].all.indices.indexOf(targetID);
+
+              return distanceScale(
+                trackSimilarities[sourceID].all.distances[targetIndex]
+              );
+            },
             type: "force",
           },
           modes: {
