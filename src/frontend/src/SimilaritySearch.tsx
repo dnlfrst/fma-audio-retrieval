@@ -107,7 +107,6 @@ const SimilaritySearch = ({
         graph.changeData(data);
       } else {
         const graph = new Graph({
-          animate: true,
           container: element,
           height,
           fitViewPadding: 250,
