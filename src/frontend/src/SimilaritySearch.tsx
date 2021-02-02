@@ -1,11 +1,46 @@
-import { Graph } from "@antv/g6";
-import { scaleLinear, scaleLog } from "d3-scale";
+import G6, { Graph } from "@antv/g6";
+import { scaleLinear } from "d3-scale";
 import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import getColorForGenre from "./colors";
 import { Track } from "./Track";
 import { Genre } from "./TrackGenrePrediction";
 import useTracks from "./useTracks";
 import useTrackSimilarities from "./useTrackSimilarities";
+
+G6.registerNode(
+  "animated-node",
+  {
+    afterDraw(modelConfiguration, group) {
+      const radius = (modelConfiguration.size as number) / 2;
+
+      const background = group.addShape("circle", {
+        zIndex: -3,
+        attrs: {
+          x: 0,
+          y: 0,
+          r: radius,
+          fill: modelConfiguration.style.stroke,
+          opacity: 0.75,
+        },
+        name: "background-circle",
+      });
+      group.sort(); // Move new shape to the background.
+
+      background.animate(
+        {
+          r: radius + 10,
+          opacity: 0.0,
+        },
+        {
+          repeat: true,
+          duration: 2000,
+          easing: "easeCubic",
+        }
+      );
+    },
+  },
+  "circle"
+);
 
 const SimilaritySearch = ({
   height,
@@ -78,9 +113,13 @@ const SimilaritySearch = ({
       const data = {
         nodes: [
           {
-            color: rootColor.fill,
             id: trackID.toString(),
             size: popularityScale(rootPopularity),
+            style: {
+              fill: rootColor.fill,
+              stroke: rootColor.stroke,
+            },
+            type: "animated-node",
           },
           ...nodes.map((id) => {
             const genre: Genre = tracks.find((track) => track.ID === id)
@@ -90,9 +129,12 @@ const SimilaritySearch = ({
             const color = getColorForGenre(genre);
 
             return {
-              color: color.fill,
               id,
               size: popularityScale(popularity),
+              style: {
+                fill: color.fill,
+                stroke: color.stroke,
+              },
             };
           }),
         ],
