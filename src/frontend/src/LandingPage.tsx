@@ -1,5 +1,13 @@
 import { GithubFilled, LoadingOutlined } from "@ant-design/icons";
-import { Button, Layout, PageHeader, Spin, Typography } from "antd";
+import {
+  Button,
+  Divider,
+  Layout,
+  PageHeader,
+  Space,
+  Spin,
+  Typography,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useMeasure } from "react-use";
 import styled from "styled-components";
@@ -21,7 +29,6 @@ const CenteredContent = styled(Content)`
   background-color: white;
   display: flex;
   justify-content: center;
-  padding-bottom: 25px;
   padding-left: 75px;
   padding-right: 75px;
   position: relative;
@@ -49,12 +56,9 @@ const FullSizeLayout = styled(Layout)`
 const GitHubLink = () => (
   <Button
     href={"https://github.com/dnlfrst/fma-audio-retrieval"}
-    icon={
-      <GithubFilled
-        style={{ color: "black", fontSize: "x-large", verticalAlign: "middle" }}
-      />
-    }
+    icon={<GithubFilled style={{ color: "black", verticalAlign: "middle" }} />}
     shape="circle"
+    style={{ marginLeft: -8 }}
     target="_blank"
     type="link"
   />
@@ -99,7 +103,6 @@ const LandingPage = () => {
     <FullSizeLayout>
       <AdaptiveHeader>
         <PageHeader
-          extra={<GitHubLink />}
           title={
             <Title>
               <ColoredLink
@@ -143,9 +146,12 @@ const LandingPage = () => {
         />
       </CenteredContent>
       <CenteredFooter>
-        <Text style={{ fontWeight: "lighter" }} type="secondary">
-          Made by <b>Daniel Fürst</b> & <b>Jonathan Yang</b>
-        </Text>
+        <Space split={<Divider type="vertical" />}>
+          <Text style={{ fontWeight: "lighter" }} type="secondary">
+            Made by <b>Daniel Fürst</b> & <b>Jonathan Yang</b>
+          </Text>
+          <GitHubLink />
+        </Space>
       </CenteredFooter>
     </FullSizeLayout>
   );
