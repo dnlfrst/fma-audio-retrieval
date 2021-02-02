@@ -1,6 +1,8 @@
 import { Area } from "@ant-design/charts";
 import { Empty, Tag, Typography } from "antd";
 import React from "react";
+import getColorForGenre, { getGenreColors } from "./colors";
+import { Genre } from "./TrackGenrePrediction";
 import useTrackGenrePredictions from "./useTrackGenrePredictions";
 import Widget from "./Widget";
 
@@ -49,6 +51,7 @@ const TrackGenreViewer = ({
     } else {
       contents = (
         <Area
+          color={getGenreColors()}
           data={trackGenrePredictionsToDisplay}
           isPercent={true}
           legend={{
@@ -85,7 +88,10 @@ const TrackGenreViewer = ({
       title={
         predictedGenre ? (
           <>
-            Predicted Genre: <Tag>{predictedGenre}</Tag>
+            Predicted Genre:{" "}
+            <Tag color={getColorForGenre(predictedGenre).fill as Genre}>
+              {predictedGenre}
+            </Tag>
           </>
         ) : (
           "Predicted Genre"

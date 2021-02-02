@@ -1,9 +1,11 @@
 import { GithubFilled, LoadingOutlined } from "@ant-design/icons";
 import { Button, Layout, PageHeader, Spin, Typography } from "antd";
 import React, { useEffect, useState } from "react";
+import { useMeasure } from "react-use";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import SimilaritySearch from "./SimilaritySearch";
+import { Track } from "./Track";
 import TrackGenreViewer from "./TrackGenreViewer";
 import TrackViewer from "./TrackViewer";
 import useTracks from "./useTracks";
@@ -69,12 +71,15 @@ const Title = styled.span`
 `;
 
 const LandingPage = () => {
+  const [displayedTracks, setDisplayedTracks] = useState<Track[]>();
+  const [hoveredTrackID, setHoveredTrackID] = useState<string | undefined>();
   const [playbackProgress, setPlaybackProgress] = useState<number | undefined>(
     0
   );
   const [playingTrackID, setPlayingTrackID] = useState<string | undefined>();
   const [selectedTrackID, setSelectedTrackID] = useState<string | undefined>();
   const tracks = useTracks();
+  const [wrapper, { height, width }] = useMeasure();
 
   const selectRandomTrack = () => {
     const randomTrackID =
@@ -109,17 +114,24 @@ const LandingPage = () => {
         />
       </AdaptiveHeader>
       <CenteredContent>
-        {selectedTrackID ? (
-          <SimilaritySearch
-            setSelectedTrackID={setSelectedTrackID}
-            trackID={selectedTrackID}
-          />
-        ) : (
-          <CenteredSpin indicator={<LoadingOutlined />} />
-        )}
+        <div ref={wrapper} style={{ flex: 1 }}>
+          {selectedTrackID ? (
+            <SimilaritySearch
+              height={height}
+              setDisplayedTracks={setDisplayedTracks}
+              setHoveredTrackID={setHoveredTrackID}
+              setSelectedTrackID={setSelectedTrackID}
+              trackID={selectedTrackID}
+              width={width}
+            />
+          ) : (
+            <CenteredSpin indicator={<LoadingOutlined />} />
+          )}
+        </div>
         <TrackViewer
+          displayedTracks={displayedTracks}
           selectRandomTrack={selectRandomTrack}
-          trackID={selectedTrackID}
+          trackID={hoveredTrackID || selectedTrackID}
         />
         <AudioPlayer
           setPlaybackProgress={setPlaybackProgress}
