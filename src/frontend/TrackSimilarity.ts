@@ -14,3 +14,9 @@ export interface TrackSimilarity {
   distances: number[];
   indices: number[];
 }
+
+export enum TrackSimilarityFeatures {
+  BEAT = "beat",
+  COMBINED = "all",
+  TIMBRE = "timbre",
+}
