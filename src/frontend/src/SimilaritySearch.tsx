@@ -132,10 +132,12 @@ const SimilaritySearch = ({
 
               const targetIndex = trackSimilarities[
                 sourceID
-              ].all.indices.indexOf(targetID);
+              ]?.all.indices.indexOf(targetID);
 
-              return distanceScale(
-                trackSimilarities[sourceID].all.distances[targetIndex]
+              return (
+                distanceScale(
+                  trackSimilarities[sourceID]?.all.distances[targetIndex]
+                ) ?? 25
               );
             },
             type: "force",
