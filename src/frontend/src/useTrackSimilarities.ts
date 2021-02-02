@@ -4,7 +4,7 @@ import {
   TrackSimilarities,
   TrackSimilaritiesFromAPI,
   TrackSimilarity,
-} from "../TrackSimilarity";
+} from "./TrackSimilarity";
 
 const useTrackSimilarities = (trackID: string) => {
   const [
