@@ -78,6 +78,7 @@ const TrackGenreViewer = ({
 
   return (
     <Widget
+      size="small"
       style={{
         right: 75,
         width: 450,

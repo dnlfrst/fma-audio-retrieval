@@ -18,7 +18,7 @@ const AudioPlayer = ({
   trackID: string;
 }) => {
   return (
-    <Widget>
+    <Widget size="small">
       <StyledHTMLAudioPlayer
         autoPlay={false}
         autoPlayAfterSrcChange={false}

@@ -54,6 +54,7 @@ const Settings = ({
 
   return (
     <Widget
+      size="small"
       style={{
         height: "max-content",
         right: 75,

@@ -16,10 +16,11 @@ const Grid = styled.div`
 const Legend = () => {
   return (
     <Widget
+      size="small"
       style={{
         height: "max-content",
         right: 75,
-        top: 335,
+        top: 300,
         width: 450,
       }}
       title="Legend"
