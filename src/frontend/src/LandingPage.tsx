@@ -13,6 +13,7 @@ import { useMeasure } from "react-use";
 import styled from "styled-components";
 import AudioPlayer from "./AudioPlayer";
 import Legend from "./Legend";
+import Search from "./Search";
 import Settings from "./Settings";
 import SimilaritySearch from "./SimilaritySearch";
 import { Track } from "./Track";
@@ -126,6 +127,7 @@ const LandingPage = () => {
         />
       </AdaptiveHeader>
       <CenteredContent>
+        <Search setSelectedTrackID={setSelectedTrackID} />
         <Settings
           numberOfNodes={numberOfNodes}
           numberOfNeighbors={numberOfNeighbors}
